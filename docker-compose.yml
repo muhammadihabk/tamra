@@ -1,0 +1,19 @@
+services:
+  backend:
+    container_name: backend
+    build:
+      context: .
+      target: dev
+    depends_on:
+      - mongodb
+    volumes:
+      - .:/app
+      - /app/node_modules
+    ports:
+      - '3000:3000'
+
+  mongodb:
+    image: mongo:8.0.4
+    env_file: .env
+    ports:
+      - '27017:27017'
