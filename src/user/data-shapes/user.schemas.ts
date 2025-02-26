@@ -1,5 +1,7 @@
 import mongoose from 'mongoose';
+import { habitModelName } from 'src/habit/data-shapes/habit.schemas';
 
+export const userModelName = 'user';
 export const userSchema = new mongoose.Schema(
   {
     name: {
@@ -20,7 +22,7 @@ export const userSchema = new mongoose.Schema(
     habits: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'habit',
+        ref: habitModelName,
         goal: {
           type: Object,
           required: true,
@@ -47,7 +49,7 @@ export const userSchema = new mongoose.Schema(
     ],
   },
   {
-    collection: 'user',
+    collection: userModelName,
   },
 );
 
@@ -96,5 +98,3 @@ userSchema.path('habits.$goal.repeat').validate(function (repeat) {
       return false;
   }
 }, 'Invalid repeat format for the given interval.');
-
-export const modelName = 'user';
