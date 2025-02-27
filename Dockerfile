@@ -4,6 +4,7 @@ COPY package*.json ./
 RUN npm install
 COPY tsconfig.json ./
 COPY src/ ./
+COPY config/ ./
 
 FROM base AS dev
 EXPOSE 3000
