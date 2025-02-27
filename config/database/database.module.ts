@@ -1,6 +1,9 @@
 import { Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
+import { DatabaseSeed } from './seed/database.seed';
+import { habitLogModelName, habitSchema } from 'src/habit/data-types/habit.schemas';
+import { userModelName, userSchema } from 'src/user/data-types/user.schemas';
 
 @Module({
   imports: [
@@ -12,6 +15,9 @@ import { MongooseModule } from '@nestjs/mongoose';
       },
       inject: [ConfigService],
     }),
+    MongooseModule.forFeature([{ name: userModelName, schema: userSchema }]),
+    MongooseModule.forFeature([{ name: habitLogModelName, schema: habitSchema }]),
   ],
+  providers: [DatabaseSeed],
 })
 export class DatabaseModule {}

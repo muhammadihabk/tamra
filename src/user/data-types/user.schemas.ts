@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { habitModelName } from 'src/habit/data-shapes/habit.schemas';
+import { habitSchema } from 'src/habit/data-types/habit.schemas';
 
 export const userModelName = 'user';
 export const userSchema = new mongoose.Schema(
@@ -21,8 +21,10 @@ export const userSchema = new mongoose.Schema(
     },
     habits: [
       {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: habitModelName,
+        habit: {
+          type: habitSchema,
+          required: true,
+        },
         goal: {
           type: Object,
           required: true,
@@ -39,7 +41,6 @@ export const userSchema = new mongoose.Schema(
             enum: ['day', 'week', 'month'],
             required: true,
           },
-
           reminder: {
             type: String,
             required: true,
@@ -53,8 +54,8 @@ export const userSchema = new mongoose.Schema(
   },
 );
 
-userSchema.path('habits.$goal.repeat').validate(function (repeat) {
-  const interval = this.get('habits.$goal.interval');
+userSchema.path('habits.0.goal').validate(function ({ repeat }) {
+  const interval = (this as any).goal.interval;
   switch (interval) {
     case 'day':
       return (
