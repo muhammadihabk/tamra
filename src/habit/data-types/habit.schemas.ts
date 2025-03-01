@@ -1,35 +1,30 @@
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose from 'mongoose';
 
-export const habitLogModelName = 'habit_log';
-export const habitSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
-  },
-  is_yes_no: {
-    type: Boolean,
-  },
-  is_shared: {
-    type: Boolean,
-  },
-});
+@Schema({
+  _id: false,
+})
+export class Habit {
+  @Prop({ required: true })
+  name: string;
 
-export const habitLogSchema = new mongoose.Schema(
-  {
-    count: {
-      type: Number,
-      required: true,
-    },
-    date: {
-      type: Date,
-      required: true,
-    },
-    habit_id: {
-      type: mongoose.Schema.Types.ObjectId,
-      required: true,
-    },
-  },
-  {
-    collection: habitLogModelName,
-  },
-);
+  is_yes_no?: boolean;
+
+  is_shared?: boolean;
+}
+export const HabitSchema = SchemaFactory.createForClass(Habit);
+
+@Schema({
+  collection: 'habit_log',
+})
+export class HabitLog {
+  @Prop({ required: true })
+  count: number;
+
+  @Prop({ required: true })
+  date: Date;
+
+  @Prop({ required: true })
+  habit_id: mongoose.Schema.Types.ObjectId;
+}
+export const HabitLogSchema = SchemaFactory.createForClass(HabitLog);

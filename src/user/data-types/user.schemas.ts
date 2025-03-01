@@ -1,101 +1,129 @@
-import mongoose from 'mongoose';
-import { habitSchema } from 'src/habit/data-types/habit.schemas';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Habit, HabitSchema } from 'src/habit/data-types/habit.schemas';
 
-export const userModelName = 'user';
-export const userSchema = new mongoose.Schema(
-  {
-    name: {
-      type: String,
-      required: true,
-    },
-    email: {
-      type: String,
-      required: true,
-    },
-    password: {
-      type: String,
-      required: true,
-    },
-    picture: {
-      type: String,
-    },
-    habits: [
-      {
-        habit: {
-          type: habitSchema,
-          required: true,
-        },
-        goal: {
-          type: Object,
-          required: true,
-          count: {
-            type: Number,
-            required: true,
-          },
-          repeat: {
-            type: Object,
-            required: true,
-          },
-          interval: {
-            type: String,
-            enum: ['day', 'week', 'month'],
-            required: true,
-          },
-          reminder: {
-            type: String,
-            required: true,
-          },
-        },
-      },
-    ],
-  },
-  {
-    collection: userModelName,
-  },
-);
+@Schema({
+  _id: false,
+})
+class Repeat {
+  @Prop({ required: true })
+  every?: number;
 
-userSchema.path('habits.0.goal').validate(function ({ repeat }) {
-  const interval = (this as any).goal.interval;
-  switch (interval) {
-    case 'day':
-      return (
+  @Prop()
+  on?: string[];
+}
+
+@Schema({
+  _id: false,
+})
+class Goal {
+  @Prop({ required: true })
+  count: number;
+
+  @Prop({ required: true })
+  repeat: Repeat;
+
+  @Prop({ required: true })
+  interval: 'day' | 'week' | 'month' | 'year';
+
+  @Prop({ required: true })
+  reminder: string;
+}
+const GoalSchema = SchemaFactory.createForClass(Goal);
+
+@Schema({ collection: 'user' })
+export class User {
+  @Prop({ required: true })
+  name: string;
+
+  @Prop({ required: true })
+  email: string;
+
+  @Prop({ required: true })
+  password: string;
+
+  @Prop()
+  picture?: string;
+
+  @Prop([
+    {
+      habit: { type: HabitSchema, required: true },
+      goal: { type: GoalSchema, required: true },
+    },
+  ])
+  habits?: {
+    habit: Habit;
+    goal: Goal;
+  }[];
+}
+export const UserSchema = SchemaFactory.createForClass(User);
+
+UserSchema.pre('validate', function (next) {
+  const user = this as any;
+  if (user.habits) {
+    for (const habit of user.habits) {
+      const { repeat } = habit.goal;
+      const interval = habit.goal.interval;
+      let isValid =
         typeof repeat.every === 'number' &&
         repeat.every > 0 &&
-        repeat.every < 100
-      );
-    case 'week':
-      return (
-        Array.isArray(repeat.on) &&
-        repeat.on.every((day) =>
-          ['Sat', 'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri'].includes(day),
-        )
-      );
-    case 'month':
-      return (
-        Array.isArray(repeat.on) &&
-        repeat.on.every((item) => {
-          if (typeof item === 'number') {
-            return item >= 1 && item <= 31; // Valid date
-          }
-          if (typeof item === 'string') {
-            const validPatterns = [
-              'First',
-              'Second',
-              'Third',
-              'Fourth',
-              'Last',
-            ];
-            const validDays = ['Sat', 'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri'];
-            return (
-              item === 'Last day' ||
-              (validPatterns.some((pattern) => item.startsWith(pattern)) &&
-                validDays.some((day) => item.endsWith(day)))
+        repeat.every < 100;
+
+      switch (interval) {
+        case 'week':
+          isValid =
+            Array.isArray(repeat.on) &&
+            repeat.on.every((day) =>
+              ['Sat', 'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri'].includes(day),
             );
-          }
-          return false;
-        })
-      );
-    default:
-      return false;
+          break;
+        case 'month':
+          isValid =
+            Array.isArray(repeat.on) &&
+            repeat.on.every((item) => {
+              if (typeof item === 'number') {
+                return item >= 1 && item <= 31; // Valid date
+              }
+              if (typeof item === 'string') {
+                const validPatterns = [
+                  'First',
+                  'Second',
+                  'Third',
+                  'Fourth',
+                  'Last',
+                ];
+                const validDays = [
+                  'Sat',
+                  'Sun',
+                  'Mon',
+                  'Tue',
+                  'Wed',
+                  'Thu',
+                  'Fri',
+                ];
+                return (
+                  item === 'Last day' ||
+                  (validPatterns.some((pattern) => item.startsWith(pattern)) &&
+                    validDays.some((day) => item.endsWith(day)))
+                );
+              }
+              return false;
+            });
+          break;
+        default:
+          isValid = false;
+      }
+
+      if (!isValid) {
+        const error = new Error(
+          `Invalid repeat format for the given interval. User: ${user.name}, Repeat: ${JSON.stringify(
+            repeat,
+            null,
+            2,
+          )}`,
+        );
+        return next(error);
+      }
+    }
   }
-}, 'Invalid repeat format for the given interval.');
+  next();
+});

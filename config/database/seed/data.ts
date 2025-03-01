@@ -8,8 +8,8 @@ export const users = [
     picture: '',
     habits: [
       {
+        _id: new mongoose.Types.ObjectId(),
         habit: {
-          _id: new mongoose.Types.ObjectId(),
           name: 'Quran',
           is_shared: true,
         },
@@ -23,14 +23,15 @@ export const users = [
         },
       },
       {
+        _id: new mongoose.Types.ObjectId(),
         habit: {
-          _id: new mongoose.Types.ObjectId(),
           name: 'habit_2',
           is_yes_no: true,
         },
         goal: {
           count: 40,
           repeat: {
+            every: 1,
             on: ['Mon', 'Thu'],
           },
           interval: 'week',
@@ -46,13 +47,14 @@ export const users = [
     picture: '',
     habits: [
       {
+        _id: new mongoose.Types.ObjectId(),
         habit: {
-          _id: new mongoose.Types.ObjectId(),
           name: 'habit_2',
         },
         goal: {
           count: 3,
           repeat: {
+            every: 1,
             on: ['Last Fri'],
           },
           interval: 'month',
@@ -67,26 +69,26 @@ export const habitsLogs = [
   {
     count: 640,
     date: new Date('2025-01-01'),
-    habit_id: users[0].habits[0].habit._id,
+    habit_id: users[0].habits[0]._id,
   },
   {
     count: 640,
     date: new Date('2025-01-02'),
-    habit_id: users[0].habits[0].habit._id,
+    habit_id: users[0].habits[0]._id,
   },
   {
     count: 320,
     date: new Date('2025-01-03'),
-    habit_id: users[0].habits[0].habit._id,
+    habit_id: users[0].habits[0]._id,
   },
   {
     count: 40,
     date: new Date('2025-01-06'),
-    habit_id: users[0].habits[1].habit._id,
+    habit_id: users[0].habits[1]._id,
   },
   {
     count: 1,
     date: new Date('2025-01-06'),
-    habit_id: users[1].habits[0].habit._id,
+    habit_id: users[1].habits[0]._id,
   },
 ];

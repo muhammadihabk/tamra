@@ -2,8 +2,8 @@ import { Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { DatabaseSeed } from './seed/database.seed';
-import { habitLogModelName, habitSchema } from 'src/habit/data-types/habit.schemas';
-import { userModelName, userSchema } from 'src/user/data-types/user.schemas';
+import { HabitLog, HabitLogSchema } from 'src/habit/data-types/habit.schemas';
+import { User, UserSchema } from 'src/user/data-types/user.schemas';
 
 @Module({
   imports: [
@@ -15,8 +15,10 @@ import { userModelName, userSchema } from 'src/user/data-types/user.schemas';
       },
       inject: [ConfigService],
     }),
-    MongooseModule.forFeature([{ name: userModelName, schema: userSchema }]),
-    MongooseModule.forFeature([{ name: habitLogModelName, schema: habitSchema }]),
+    MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
+    MongooseModule.forFeature([
+      { name: HabitLog.name, schema: HabitLogSchema },
+    ]),
   ],
   providers: [DatabaseSeed],
 })

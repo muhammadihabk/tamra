@@ -1,14 +1,14 @@
 import { Injectable, OnApplicationBootstrap } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { habitsLogs, users } from './data';
-import { habitLogModelName } from 'src/habit/data-types/habit.schemas';
-import { userModelName } from 'src/user/data-types/user.schemas';
+import { User } from 'src/user/data-types/user.schemas';
+import { HabitLog } from 'src/habit/data-types/habit.schemas';
 
 @Injectable()
 export class DatabaseSeed implements OnApplicationBootstrap {
   constructor(
-    @InjectModel(userModelName) private userModel: any,
-    @InjectModel(habitLogModelName) private habitLogModel: any,
+    @InjectModel(User.name) private userModel: any,
+    @InjectModel(HabitLog.name) private habitLogModel: any,
   ) {}
 
   async onApplicationBootstrap() {
