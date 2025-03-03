@@ -1,59 +1,34 @@
+import { Field, ObjectType } from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Habit, HabitSchema } from 'src/habit/data-types/habit.schemas';
-
-@Schema({
-  _id: false,
-})
-class Repeat {
-  @Prop({ required: true })
-  every?: number;
-
-  @Prop()
-  on?: string[];
-}
-
-@Schema({
-  _id: false,
-})
-class Goal {
-  @Prop({ required: true })
-  count: number;
-
-  @Prop({ required: true })
-  repeat: Repeat;
-
-  @Prop({ required: true })
-  interval: 'day' | 'week' | 'month' | 'year';
-
-  @Prop({ required: true })
-  reminder: string;
-}
-const GoalSchema = SchemaFactory.createForClass(Goal);
+import { Habit, habitSchema } from 'src/habit/data-types/habit.schemas';
 
 @Schema({ collection: 'user' })
+@ObjectType()
 export class User {
+  @Field()
+  id: string;
+
   @Prop({ required: true })
+  @Field()
   name: string;
 
   @Prop({ required: true })
+  @Field()
   email: string;
 
   @Prop({ required: true })
   password: string;
 
   @Prop()
+  @Field()
   picture?: string;
 
-  @Prop([
-    {
-      habit: { type: HabitSchema, required: true },
-      goal: { type: GoalSchema, required: true },
-    },
-  ])
-  habits?: {
-    habit: Habit;
-    goal: Goal;
-  }[];
+  @Prop({
+    type: [habitSchema],
+    default: undefined,
+  })
+  @Field(() => [Habit])
+  habits?: Habit[];
 }
 export const UserSchema = SchemaFactory.createForClass(User);
 
@@ -69,8 +44,12 @@ UserSchema.pre('validate', function (next) {
         repeat.every < 100;
 
       switch (interval) {
+        case 'day':
+          isValid = isValid && true;
+          break;
         case 'week':
           isValid =
+            isValid &&
             Array.isArray(repeat.on) &&
             repeat.on.every((day) =>
               ['Sat', 'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri'].includes(day),
@@ -78,6 +57,7 @@ UserSchema.pre('validate', function (next) {
           break;
         case 'month':
           isValid =
+            isValid &&
             Array.isArray(repeat.on) &&
             repeat.on.every((item) => {
               if (typeof item === 'number') {

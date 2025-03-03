@@ -9,10 +9,8 @@ export const users = [
     habits: [
       {
         _id: new mongoose.Types.ObjectId(),
-        habit: {
-          name: 'Quran',
-          is_shared: true,
-        },
+        name: 'Quran',
+        is_shared: true,
         goal: {
           count: 1,
           repeat: {
@@ -24,14 +22,12 @@ export const users = [
       },
       {
         _id: new mongoose.Types.ObjectId(),
-        habit: {
-          name: 'habit_2',
-          is_yes_no: true,
-        },
+        name: 'habit_2',
+        is_yes_no: true,
         goal: {
           count: 40,
           repeat: {
-            every: 1,
+            every: 2,
             on: ['Mon', 'Thu'],
           },
           interval: 'week',
@@ -48,9 +44,7 @@ export const users = [
     habits: [
       {
         _id: new mongoose.Types.ObjectId(),
-        habit: {
-          name: 'habit_2',
-        },
+        name: 'habit_2',
         goal: {
           count: 3,
           repeat: {
