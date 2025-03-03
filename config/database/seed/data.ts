@@ -15,9 +15,9 @@ export const users = [
           count: 1,
           repeat: {
             every: 1,
+            interval: 'day',
           },
-          interval: 'day',
-          reminder: new Date(),
+          reminder: '03:00 PM',
         },
       },
       {
@@ -27,11 +27,11 @@ export const users = [
         goal: {
           count: 40,
           repeat: {
-            every: 2,
             on: ['Mon', 'Thu'],
+            every: 2,
+            interval: 'week',
           },
-          interval: 'week',
-          reminder: new Date(),
+          reminder: '03:00 PM',
         },
       },
     ],
@@ -48,11 +48,11 @@ export const users = [
         goal: {
           count: 3,
           repeat: {
-            every: 1,
             on: ['Last Fri'],
+            every: 1,
+            interval: 'month',
           },
-          interval: 'month',
-          reminder: new Date(),
+          reminder: '03:00 PM',
         },
       },
     ],

@@ -5,13 +5,17 @@ import mongoose from 'mongoose';
 @Schema({ _id: false })
 @ObjectType()
 class Repeat {
+  @Prop({ default: undefined })
+  @Field(() => [String], { nullable: true })
+  on?: string[];
+
   @Prop({ required: true })
   @Field()
   every: number;
 
-  @Prop({ default: undefined })
-  @Field(() => [String], { nullable: true })
-  on?: string[];
+  @Prop({ required: true })
+  @Field()
+  interval: 'day' | 'week' | 'month' | 'year';
 }
 
 @Schema({
@@ -26,10 +30,6 @@ class Goal {
   @Prop({ required: true })
   @Field()
   repeat: Repeat;
-
-  @Prop({ required: true })
-  @Field()
-  interval: 'day' | 'week' | 'month' | 'year';
 
   @Prop({ required: true })
   @Field()

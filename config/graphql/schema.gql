@@ -3,14 +3,14 @@
 # ------------------------------------------------------
 
 type Repeat {
-  every: Float!
   on: [String!]
+  every: Float!
+  interval: String!
 }
 
 type Goal {
   count: Float!
   repeat: Repeat!
-  interval: String!
   reminder: String!
 }
 

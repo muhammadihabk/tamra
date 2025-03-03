@@ -37,13 +37,12 @@ UserSchema.pre('validate', function (next) {
   if (user.habits) {
     for (const habit of user.habits) {
       const { repeat } = habit.goal;
-      const interval = habit.goal.interval;
       let isValid =
         typeof repeat.every === 'number' &&
         repeat.every > 0 &&
         repeat.every < 100;
 
-      switch (interval) {
+      switch (repeat.interval) {
         case 'day':
           isValid = isValid && true;
           break;
@@ -97,8 +96,6 @@ UserSchema.pre('validate', function (next) {
         const error = new Error(
           `Invalid repeat format for the given interval. User: ${user.name}, Repeat: ${JSON.stringify(
             repeat,
-            null,
-            2,
           )}`,
         );
         return next(error);
