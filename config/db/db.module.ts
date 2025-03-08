@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
-import { DatabaseSeed } from './seed/database.seed';
+import { DbSeed } from './seed/db.seed';
 import { HabitLog, habitLogSchema } from 'src/habit/data-types/habit.schemas';
 import { User, UserSchema } from 'src/user/data-types/user.schemas';
 
@@ -20,6 +20,6 @@ import { User, UserSchema } from 'src/user/data-types/user.schemas';
       { name: HabitLog.name, schema: habitLogSchema },
     ]),
   ],
-  providers: [DatabaseSeed],
+  providers: [DbSeed],
 })
-export class DatabaseModule {}
+export class DbModule {}
