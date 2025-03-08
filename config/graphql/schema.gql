@@ -21,14 +21,36 @@ type Habit {
   goal: Goal!
 }
 
-type User {
-  id: String!
+type FindUserResponse {
   name: String!
   email: String!
   picture: String!
-  habits: [Habit!]!
+  habits: [Habit!]
+  id: String!
+}
+
+type LoginResponse {
+  token: String!
+  user: FindUserResponse!
 }
 
 type Query {
-  user(id: String!): User
+  user(id: String!): FindUserResponse
+}
+
+type Mutation {
+  login(loginInput: LoginInput!): LoginResponse!
+  signup(signupInput: SignupInput!): LoginResponse!
+}
+
+input LoginInput {
+  email: String!
+  password: String!
+}
+
+input SignupInput {
+  name: String!
+  email: String!
+  password: String!
+  picture: String!
 }

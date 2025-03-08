@@ -1,6 +1,6 @@
 import { Injectable, OnApplicationBootstrap } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { habitsLogs, users } from './data';
+import { data } from './data';
 import { User } from 'src/user/data-types/user.schemas';
 import { HabitLog } from 'src/habit/data-types/habit.schemas';
 
@@ -16,6 +16,7 @@ export class DatabaseSeed implements OnApplicationBootstrap {
   }
 
   async seed() {
+    const { users, habitsLogs } = await data();
     await this.userModel.deleteMany();
     await this.userModel.insertMany(users);
     await this.habitLogModel.deleteMany();

@@ -6,7 +6,7 @@ import { Habit, habitSchema } from 'src/habit/data-types/habit.schemas';
 @ObjectType()
 export class User {
   @Field()
-  id: string;
+  _id: string;
 
   @Prop({ required: true })
   @Field()
@@ -19,15 +19,15 @@ export class User {
   @Prop({ required: true })
   password: string;
 
-  @Prop()
+  @Prop({ required: true })
   @Field()
-  picture?: string;
+  picture: string;
 
   @Prop({
     type: [habitSchema],
     default: undefined,
   })
-  @Field(() => [Habit])
+  @Field(() => [Habit], { nullable: true })
   habits?: Habit[];
 }
 export const UserSchema = SchemaFactory.createForClass(User);
