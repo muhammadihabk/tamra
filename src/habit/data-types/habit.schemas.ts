@@ -1,4 +1,4 @@
-import { Field, ObjectType } from '@nestjs/graphql';
+import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose from 'mongoose';
 
@@ -10,7 +10,7 @@ class Repeat {
   on?: string[];
 
   @Prop({ required: true })
-  @Field()
+  @Field(() => Int)
   every: number;
 
   @Prop({ required: true })

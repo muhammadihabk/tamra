@@ -4,7 +4,7 @@
 
 type Repeat {
   on: [String!]
-  every: Float!
+  every: Int!
   interval: String!
 }
 
