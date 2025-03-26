@@ -18,9 +18,7 @@ class Repeat {
   interval: 'day' | 'week' | 'month' | 'year';
 }
 
-@Schema({
-  _id: false,
-})
+@Schema({ _id: false })
 @ObjectType()
 class Goal {
   @Prop({ required: true })

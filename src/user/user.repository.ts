@@ -3,7 +3,7 @@ import { User } from './data-types/user.schemas';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { Types } from 'mongoose';
-import { FindUserInput, FindUserInternalOutput } from './data-types/user.types';
+import { FindUserInput } from './data-types/user.types';
 import { SignupInput } from 'config/auth/data-types/auth.types';
 import * as argon from 'argon2';
 
@@ -11,9 +11,7 @@ import * as argon from 'argon2';
 export class UserRepository {
   constructor(@InjectModel(User.name) private userModel: Model<User>) {}
 
-  async findOne(
-    findUserInput: FindUserInput,
-  ): Promise<FindUserInternalOutput | null> {
+  async findOne(findUserInput: FindUserInput): Promise<User | null> {
     const { id, email } = findUserInput;
     let user;
     if (id) {
@@ -26,17 +24,24 @@ export class UserRepository {
 
     if (!user) return null;
 
-    const { _id, ...result } = user;
+    const { _id, id: _, ...result } = user;
 
-    return { id: _id, ...result };
+    return {
+      id: _id.toString(),
+      ...result,
+    };
   }
 
-  async create(signupInput: SignupInput): Promise<FindUserInternalOutput> {
+  async create(signupInput: SignupInput): Promise<User> {
     const inUser = signupInput;
     const hashedPassword = await argon.hash(inUser.password);
     inUser.password = hashedPassword.toString();
     const user = (await this.userModel.create(inUser)).toObject();
+    const { _id, id: _, ...result } = user;
 
-    return { id: user._id, ...user };
+    return {
+      id: _id.toString(),
+      ...result,
+    };
   }
 }

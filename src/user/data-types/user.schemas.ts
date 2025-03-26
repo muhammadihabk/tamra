@@ -6,7 +6,7 @@ import { Habit, habitSchema } from 'src/habit/data-types/habit.schemas';
 @ObjectType()
 export class User {
   @Field()
-  _id: string;
+  id: string;
 
   @Prop({ required: true })
   @Field()

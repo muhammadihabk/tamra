@@ -1,5 +1,5 @@
 import { Field, InputType, ObjectType } from '@nestjs/graphql';
-import { FindUserResponse } from 'src/user/data-types/user.types';
+import { User } from 'src/user/data-types/user.schemas';
 
 @InputType()
 export class LoginInput {
@@ -15,8 +15,8 @@ export class LoginResponse {
   @Field()
   token: string;
 
-  @Field(() => FindUserResponse)
-  user: FindUserResponse;
+  @Field(() => User)
+  user: User;
 }
 
 @InputType()

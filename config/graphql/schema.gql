@@ -21,21 +21,21 @@ type Habit {
   goal: Goal!
 }
 
-type FindUserResponse {
+type User {
+  id: String!
   name: String!
   email: String!
   picture: String!
   habits: [Habit!]
-  id: String!
 }
 
 type LoginResponse {
   token: String!
-  user: FindUserResponse!
+  user: User!
 }
 
 type Query {
-  user(id: String!): FindUserResponse
+  user(id: String!): User
 }
 
 type Mutation {
