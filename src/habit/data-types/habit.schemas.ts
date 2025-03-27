@@ -53,7 +53,7 @@ export class Habit {
   @Field()
   goal: Goal;
 }
-export const habitSchema = SchemaFactory.createForClass(Habit);
+export const HabitSchema = SchemaFactory.createForClass(Habit);
 
 @Schema({ collection: 'habit_log' })
 export class HabitLog {
@@ -66,4 +66,4 @@ export class HabitLog {
   @Prop({ required: true })
   habit_id: mongoose.Schema.Types.ObjectId;
 }
-export const habitLogSchema = SchemaFactory.createForClass(HabitLog);
+export const HabitLogSchema = SchemaFactory.createForClass(HabitLog);

@@ -1,6 +1,6 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Habit, habitSchema } from 'src/habit/data-types/habit.schemas';
+import { Habit, HabitSchema } from 'src/habit/data-types/habit.schemas';
 
 @Schema({ collection: 'user' })
 @ObjectType()
@@ -24,7 +24,7 @@ export class User {
   picture: string;
 
   @Prop({
-    type: [habitSchema],
+    type: [HabitSchema],
     default: undefined,
   })
   @Field(() => [Habit], { nullable: true })

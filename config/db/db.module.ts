@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { DbSeed } from './seed/db.seed';
-import { HabitLog, habitLogSchema } from 'src/habit/data-types/habit.schemas';
+import { HabitLog, HabitLogSchema } from 'src/habit/data-types/habit.schemas';
 import { User, UserSchema } from 'src/user/data-types/user.schemas';
 
 @Module({
@@ -15,9 +15,9 @@ import { User, UserSchema } from 'src/user/data-types/user.schemas';
       },
       inject: [ConfigService],
     }),
-    MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
     MongooseModule.forFeature([
-      { name: HabitLog.name, schema: habitLogSchema },
+      { name: User.name, schema: UserSchema },
+      { name: HabitLog.name, schema: HabitLogSchema },
     ]),
   ],
   providers: [DbSeed],
