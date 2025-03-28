@@ -5,7 +5,7 @@ import { GqlJwtAuthGuard } from 'config/auth/jwt-auth.guard';
 import { User } from './data-types/user.schemas';
 
 @Resolver()
-export class UserResolver {
+export class UserResolvers {
   constructor(private userService: UserService) {}
 
   @Query(() => User, { name: 'user', nullable: true })

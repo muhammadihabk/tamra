@@ -9,7 +9,7 @@ import {
 } from './data-types/auth.types';
 
 @Resolver()
-export class AuthResolver {
+export class AuthResolvers {
   constructor(private authService: AuthService) {}
 
   @Mutation(() => LoginResponse)

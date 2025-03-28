@@ -6,7 +6,7 @@ import { ConfigService } from '@nestjs/config';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { GqlLocalAuthGuard } from './local-auth.guard';
-import { AuthResolver } from './auth.resolver';
+import { AuthResolvers } from './auth.resolvers';
 import { JwtStrategy } from './jwt.strategy';
 import { GqlJwtAuthGuard } from './jwt-auth.guard';
 
@@ -22,6 +22,6 @@ import { GqlJwtAuthGuard } from './jwt-auth.guard';
       inject: [ConfigService],
     }),
   ],
-  providers: [AuthResolver, AuthService, LocalStrategy, GqlLocalAuthGuard, JwtStrategy, GqlJwtAuthGuard],
+  providers: [AuthResolvers, AuthService, LocalStrategy, GqlLocalAuthGuard, JwtStrategy, GqlJwtAuthGuard],
 })
 export class AuthModule {}

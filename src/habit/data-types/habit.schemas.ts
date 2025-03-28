@@ -45,10 +45,6 @@ export class Habit {
   @Field({ name: 'isYesNo', nullable: true })
   is_yes_no?: boolean;
 
-  @Prop()
-  @Field({ name: 'isShared', nullable: true })
-  is_shared?: boolean;
-
   @Prop({ required: true })
   @Field()
   goal: Goal;

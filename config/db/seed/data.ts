@@ -12,7 +12,6 @@ export const data = async () => {
         {
           _id: new mongoose.Types.ObjectId(),
           name: 'Quran',
-          is_shared: true,
           goal: {
             count: 1,
             repeat: {
