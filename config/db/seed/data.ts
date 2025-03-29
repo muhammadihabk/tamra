@@ -70,27 +70,27 @@ export const data = async () => {
     {
       count: 640,
       date: new Date('2025-01-01'),
-      habit_id: users[0].habits[0]._id,
+      habitId: users[0].habits[0]._id,
     },
     {
       count: 640,
       date: new Date('2025-01-02'),
-      habit_id: users[0].habits[0]._id,
+      habitId: users[0].habits[0]._id,
     },
     {
       count: 320,
       date: new Date('2025-01-03'),
-      habit_id: users[0].habits[0]._id,
+      habitId: users[0].habits[0]._id,
     },
     {
       count: 40,
       date: new Date('2025-01-06'),
-      habit_id: users[0].habits[1]._id,
+      habitId: users[0].habits[1]._id,
     },
     {
       count: 1,
       date: new Date('2025-01-06'),
-      habit_id: users[1].habits[0]._id,
+      habitId: users[1].habits[0]._id,
     },
   ];
 

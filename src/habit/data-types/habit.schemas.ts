@@ -37,6 +37,9 @@ class Goal {
 @Schema()
 @ObjectType()
 export class Habit {
+  @Field()
+  id: string;
+
   @Prop({ required: true })
   @Field()
   name: string;
@@ -60,6 +63,6 @@ export class HabitLog {
   date: Date;
 
   @Prop({ required: true })
-  habit_id: mongoose.Schema.Types.ObjectId;
+  habitId: mongoose.Schema.Types.ObjectId;
 }
 export const HabitLogSchema = SchemaFactory.createForClass(HabitLog);

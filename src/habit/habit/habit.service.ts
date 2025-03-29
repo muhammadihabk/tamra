@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { HabitRepository } from './habit.repository';
-import { CreateHabitInput } from './data-types/habit.types';
+import { CreateHabitInput } from '../data-types/habit.types';
 
 @Injectable()
 export class HabitService {

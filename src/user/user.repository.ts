@@ -11,6 +11,17 @@ import * as argon from 'argon2';
 export class UserRepository {
   constructor(@InjectModel(User.name) private userModel: Model<User>) {}
 
+  async create(signupInput: SignupInput): Promise<User> {
+    const inUser = signupInput;
+    const hashedPassword = await argon.hash(inUser.password);
+    inUser.password = hashedPassword.toString();
+    const user: any = (await this.userModel.create(inUser)).toObject();
+    user.id = user._id.toString();
+    delete user._id;
+
+    return user;
+  }
+
   async findOne(findUserInput: FindUserInput): Promise<User | null> {
     const { id, email } = findUserInput;
     let user;
@@ -24,24 +35,30 @@ export class UserRepository {
 
     if (!user) return null;
 
-    const { _id, id: _, ...result } = user;
+    user.id = user._id.toString();
+    delete user._id;
+    user.habits.forEach((habit) => {
+      habit.id = habit._id.toString();
+      delete habit._id;
+    });
 
-    return {
-      id: _id.toString(),
-      ...result,
-    };
+    return user;
   }
 
-  async create(signupInput: SignupInput): Promise<User> {
-    const inUser = signupInput;
-    const hashedPassword = await argon.hash(inUser.password);
-    inUser.password = hashedPassword.toString();
-    const user = (await this.userModel.create(inUser)).toObject();
-    const { _id, id: _, ...result } = user;
+  async findOneByHabitId(habitId: string): Promise<User | null> {
+    const user: any = await this.userModel
+      .findOne({ habits: { $elemMatch: { _id: new Types.ObjectId(habitId) } } })
+      .lean();
 
-    return {
-      id: _id.toString(),
-      ...result,
-    };
+    if (!user) return null;
+
+    user.id = user._id.toString();
+    delete user._id;
+    user.habits.forEach((habit) => {
+      habit.id = habit._id.toString();
+      delete habit._id;
+    });
+
+    return user;
   }
 }

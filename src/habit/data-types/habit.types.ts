@@ -26,7 +26,7 @@ export class GoalInput {
 
 @InputType()
 export class CreateHabitInput {
-  user_id: string;
+  userId: string;
 
   @Field()
   name: string;
@@ -36,4 +36,16 @@ export class CreateHabitInput {
 
   @Field()
   goal: GoalInput;
+}
+
+@InputType()
+export class CreateHabitLogInput {
+  @Field(() => Int)
+  count: number;
+
+  @Field()
+  date: Date;
+
+  @Field()
+  habitId: string;
 }

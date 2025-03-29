@@ -1,7 +1,7 @@
 import { ObjectType, Field } from '@nestjs/graphql';
 
 @ObjectType()
-export class UpdateResponse {
+export class GeneralResponse {
   @Field()
   isSuccessful: boolean;
 
