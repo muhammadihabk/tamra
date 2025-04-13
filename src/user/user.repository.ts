@@ -4,7 +4,7 @@ import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { Types } from 'mongoose';
 import { FindUserInput } from './data-types/user.types';
-import { SignupInput } from 'config/auth/data-types/auth.types';
+import { SignupInput } from 'src/config/auth/data-types/auth.types';
 import * as argon from 'argon2';
 
 @Injectable()

@@ -1,6 +1,6 @@
 import { Args, Context, Mutation, Resolver } from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
-import { GqlJwtAuthGuard } from 'config/auth/jwt-auth.guard';
+import { GqlJwtAuthGuard } from '../../config/auth/jwt-auth.guard';
 import { HabitService } from './habit.service';
 import { CreateHabitInput } from '../data-types/habit.types';
 import { GeneralResponse } from 'src/general-types/general-types.types';

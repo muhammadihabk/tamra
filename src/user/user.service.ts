@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { UserRepository } from './user.repository';
 import { FindUserInput } from './data-types/user.types';
-import { SignupInput } from 'config/auth/data-types/auth.types';
 import { User } from './data-types/user.schemas';
+import { SignupInput } from 'src/config/auth/data-types/auth.types';
 
 @Injectable()
 export class UserService {
