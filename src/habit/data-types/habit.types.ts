@@ -1,4 +1,4 @@
-import { Field, InputType, Int } from '@nestjs/graphql';
+import { Field, InputType, Int, ObjectType } from '@nestjs/graphql';
 
 @InputType()
 export class RepeatInput {
@@ -48,4 +48,22 @@ export class CreateHabitLogInput {
 
   @Field()
   habitId: string;
+}
+
+@InputType()
+export class FindHabitLogsInput {
+  @Field()
+  habitId: string;
+}
+
+@ObjectType()
+export class FindHabitLogsOutput {
+  @Field(() => Int)
+  totalCount: number;
+
+  @Field(() => Int)
+  streak: number;
+
+  @Field(() => Int)
+  score: number;
 }

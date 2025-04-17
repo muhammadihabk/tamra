@@ -1,9 +1,13 @@
-import { Args, Context, Mutation, Resolver } from '@nestjs/graphql';
+import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
 import { GqlJwtAuthGuard } from '../../config/auth/jwt-auth.guard';
 import { HabitLogService } from './habit-log.service';
-import { CreateHabitLogInput } from '../data-types/habit.types';
-import { GeneralResponse } from 'src/common/general.types';
+import {
+  CreateHabitLogInput,
+  FindHabitLogsInput,
+  FindHabitLogsOutput,
+} from '../data-types/habit.types';
+import { GeneralResponse } from 'src/common/data-types/general.types';
 import { UserService } from 'src/user/user.service';
 
 @Resolver()
@@ -40,5 +44,14 @@ export class HabitLogResolvers {
     return {
       isSuccessful: true,
     };
+  }
+
+  @Query(() => FindHabitLogsOutput, { name: 'habitLogs' })
+  @UseGuards(GqlJwtAuthGuard)
+  async findAll(
+    @Args('findHabitLogsInput')
+    findHabitLogsInput: FindHabitLogsInput,
+  ) {
+    return await this.habitLogService.findAll(findHabitLogsInput);
   }
 }

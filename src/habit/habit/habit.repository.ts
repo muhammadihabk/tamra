@@ -10,15 +10,25 @@ export class HabitRepository {
 
   async create(createHabitInput: CreateHabitInput) {
     const { userId, ...rest } = createHabitInput;
-    await this.userModel.findByIdAndUpdate(
-      new Types.ObjectId(userId),
-      {
-        $push: {
-          habits: {
-            ...rest,
-          },
+    await this.userModel.findByIdAndUpdate(new Types.ObjectId(userId), {
+      $push: {
+        habits: {
+          ...rest,
         },
       },
+    });
+  }
+
+  async findOne(habitId: string) {
+    const habit = await this.userModel.findOne(
+      {
+        'habits._id': new Types.ObjectId(habitId),
+      },
+      {
+        'habits.$': 1,
+      },
     );
+
+    return habit?.habits?.[0];
   }
 }

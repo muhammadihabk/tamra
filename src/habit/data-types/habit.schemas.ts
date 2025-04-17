@@ -54,7 +54,19 @@ export class Habit {
 }
 export const HabitSchema = SchemaFactory.createForClass(Habit);
 
-@Schema({ collection: 'habit_log' })
+@Schema({
+  collection: 'habit_log',
+  toObject: {
+    transform: function (_, ret) {
+      ret.id = ret._id.toString();
+      delete ret._id;
+      delete ret.__v;
+      ret.habitId = ret.habitId.toString();
+
+      return ret;
+    },
+  },
+})
 export class HabitLog {
   @Prop({ required: true })
   count: number;

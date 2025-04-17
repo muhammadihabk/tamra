@@ -29,6 +29,12 @@ type User {
   habits: [Habit!]
 }
 
+type FindHabitLogsOutput {
+  totalCount: Int!
+  streak: Int!
+  score: Int!
+}
+
 type GeneralResponse {
   isSuccessful: Boolean!
   message: String
@@ -41,6 +47,11 @@ type LoginResponse {
 
 type Query {
   user(id: String!): User
+  habitLogs(findHabitLogsInput: FindHabitLogsInput!): FindHabitLogsOutput!
+}
+
+input FindHabitLogsInput {
+  habitId: String!
 }
 
 type Mutation {
