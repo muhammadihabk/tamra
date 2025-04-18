@@ -16,7 +16,28 @@ export class HabitLogRepository {
   ) {}
 
   async create(createHabitLogInput: CreateHabitLogInput) {
+    const existingHabitLog: any = await this.findOne({
+      date: createHabitLogInput.date,
+    });
+
+    if (existingHabitLog) {
+      await this.habitLogModel.updateOne(
+        { _id: existingHabitLog._id },
+        { $set: createHabitLogInput },
+      );
+
+      return;
+    }
+
     await this.habitLogModel.create(createHabitLogInput);
+  }
+
+  async findOne(options: any) {
+    const habit = await this.habitLogModel.findOne({
+      date: new Date(options.date),
+    });
+
+    return habit;
   }
 
   async findAll(findHabitLogsInput: FindHabitLogsInput) {
