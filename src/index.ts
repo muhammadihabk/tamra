@@ -1,1 +1,3 @@
-console.log('hello');
+import startApolloServer from './config/gql/gql';
+
+startApolloServer();
