@@ -1,21 +1,16 @@
 import { Resolvers, User } from '../../config/gql/types';
+import userService from './user.service';
 
 const resolvers: Resolvers = {
   Query: {
     user: (_, params) => {
-      console.log(params);
-      return find();
+      return findOne(params.id);
     },
   },
 };
 
-async function find(): Promise<User> {
-  return {
-    _id: '1',
-    email: 'mo@example.com',
-    name: 'mo',
-    picture: '<link>',
-  };
+async function findOne(id: string): Promise<User | null> {
+  return await userService.findOne(id);
 }
 
 export default {
