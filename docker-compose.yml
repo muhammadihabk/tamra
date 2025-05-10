@@ -7,7 +7,6 @@ services:
       - mongodb
     volumes:
       - .:/app
-      - node_modules:/app/node_modules
     ports:
       - '3000:3000'
 
@@ -20,6 +19,5 @@ services:
       - mongo_data:/data/db
       - mongo_config:/data/configdb
 volumes:
-  node_modules:
   mongo_data:
   mongo_config:
