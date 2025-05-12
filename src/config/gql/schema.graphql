@@ -3,6 +3,8 @@ type User {
   name: String!
   email: String!
   picture: String
+  # createdAt: String!
+  # updatedAt: String!
 }
 
 type Query {

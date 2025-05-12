@@ -1,5 +1,5 @@
 import { Resolvers, User } from '../../config/gql/types';
-import userService from './user.service';
+import UserService from './user.service';
 
 const resolvers: Resolvers = {
   Query: {
@@ -10,7 +10,7 @@ const resolvers: Resolvers = {
 };
 
 async function findOne(id: string): Promise<User | null> {
-  return await userService.findOne(id);
+  return await UserService.findOne({ id });
 }
 
 export default {
