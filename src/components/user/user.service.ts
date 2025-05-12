@@ -21,7 +21,7 @@ async function findOne(filter: IFindUserFilter): Promise<User | null> {
   }
   const { salt, hash, _id, ...user } = result;
 
-  return { ...user, _id };
+  return { ...user, _id: _id.toString() };
 }
 
 async function authFindOne(filter: IFindUserFilter): Promise<IDBUser | null> {

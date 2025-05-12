@@ -1,3 +1,5 @@
+import { IHabitInstance } from "../habit-instance/habit-instance.types";
+
 export interface IDBUser {
   _id: string;
   name: string;
@@ -5,6 +7,7 @@ export interface IDBUser {
   salt: string;
   hash: string;
   picture?: string;
+  habits: IHabitInstance[]
   createdAt: Date;
   updatedAt: Date;
 }

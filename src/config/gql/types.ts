@@ -22,6 +22,16 @@ export type CreateHabitDefinitionInput = {
   name: Scalars['String']['input'];
 };
 
+export type CreateHabitInstanceInput = {
+  goal: HabitGoalInput;
+  habitDefinitionId: Scalars['String']['input'];
+};
+
+export type GeneralResponse = {
+  __typename?: 'GeneralResponse';
+  message: Scalars['String']['output'];
+};
+
 export type HabitDefinition = {
   __typename?: 'HabitDefinition';
   _id: Scalars['String']['output'];
@@ -30,14 +40,55 @@ export type HabitDefinition = {
   updatedAt: Scalars['DateTime']['output'];
 };
 
+export type HabitGoal = {
+  __typename?: 'HabitGoal';
+  count: Scalars['Int']['output'];
+  reminder?: Maybe<Scalars['String']['output']>;
+  repeat: HabitRepeat;
+};
+
+export type HabitGoalInput = {
+  count: Scalars['Int']['input'];
+  reminder?: InputMaybe<Scalars['String']['input']>;
+  repeat: HabitRepeatInput;
+};
+
+export type HabitInstance = {
+  __typename?: 'HabitInstance';
+  _id: Scalars['String']['output'];
+  createdAt: Scalars['DateTime']['output'];
+  goal: HabitGoal;
+  habitDefinitionId: Scalars['String']['output'];
+  updatedAt: Scalars['DateTime']['output'];
+};
+
+export type HabitRepeat = {
+  __typename?: 'HabitRepeat';
+  every: Scalars['Int']['output'];
+  interval: RepeatInterval;
+  on?: Maybe<Array<Maybe<RepeatOn>>>;
+};
+
+export type HabitRepeatInput = {
+  every: Scalars['Int']['input'];
+  interval: RepeatInterval;
+  on?: InputMaybe<Array<InputMaybe<RepeatOn>>>;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   createHabitDefinition?: Maybe<HabitDefinition>;
+  createHabitInstance?: Maybe<GeneralResponse>;
 };
 
 
 export type MutationCreateHabitDefinitionArgs = {
   createHabitDefinitionInput?: InputMaybe<CreateHabitDefinitionInput>;
+};
+
+
+export type MutationCreateHabitInstanceArgs = {
+  createHabitInstanceInput?: InputMaybe<CreateHabitInstanceInput>;
 };
 
 export type Query = {
@@ -49,6 +100,23 @@ export type Query = {
 export type QueryUserArgs = {
   id: Scalars['String']['input'];
 };
+
+export enum RepeatInterval {
+  Day = 'day',
+  Month = 'month',
+  Week = 'week',
+  Year = 'year'
+}
+
+export enum RepeatOn {
+  Fri = 'Fri',
+  Mon = 'Mon',
+  Sat = 'Sat',
+  Sun = 'Sun',
+  Thu = 'Thu',
+  Tue = 'Tue',
+  Wed = 'Wed'
+}
 
 export type User = {
   __typename?: 'User';
@@ -133,10 +201,20 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 export type ResolversTypes = {
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
   CreateHabitDefinitionInput: CreateHabitDefinitionInput;
+  CreateHabitInstanceInput: CreateHabitInstanceInput;
   DateTime: ResolverTypeWrapper<Scalars['DateTime']['output']>;
+  GeneralResponse: ResolverTypeWrapper<GeneralResponse>;
   HabitDefinition: ResolverTypeWrapper<HabitDefinition>;
+  HabitGoal: ResolverTypeWrapper<HabitGoal>;
+  HabitGoalInput: HabitGoalInput;
+  HabitInstance: ResolverTypeWrapper<HabitInstance>;
+  HabitRepeat: ResolverTypeWrapper<HabitRepeat>;
+  HabitRepeatInput: HabitRepeatInput;
+  Int: ResolverTypeWrapper<Scalars['Int']['output']>;
   Mutation: ResolverTypeWrapper<{}>;
   Query: ResolverTypeWrapper<{}>;
+  RepeatInterval: RepeatInterval;
+  RepeatOn: RepeatOn;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
   User: ResolverTypeWrapper<User>;
 };
@@ -145,8 +223,16 @@ export type ResolversTypes = {
 export type ResolversParentTypes = {
   Boolean: Scalars['Boolean']['output'];
   CreateHabitDefinitionInput: CreateHabitDefinitionInput;
+  CreateHabitInstanceInput: CreateHabitInstanceInput;
   DateTime: Scalars['DateTime']['output'];
+  GeneralResponse: GeneralResponse;
   HabitDefinition: HabitDefinition;
+  HabitGoal: HabitGoal;
+  HabitGoalInput: HabitGoalInput;
+  HabitInstance: HabitInstance;
+  HabitRepeat: HabitRepeat;
+  HabitRepeatInput: HabitRepeatInput;
+  Int: Scalars['Int']['output'];
   Mutation: {};
   Query: {};
   String: Scalars['String']['output'];
@@ -157,6 +243,11 @@ export interface DateTimeScalarConfig extends GraphQLScalarTypeConfig<ResolversT
   name: 'DateTime';
 }
 
+export type GeneralResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['GeneralResponse'] = ResolversParentTypes['GeneralResponse']> = {
+  message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type HabitDefinitionResolvers<ContextType = any, ParentType extends ResolversParentTypes['HabitDefinition'] = ResolversParentTypes['HabitDefinition']> = {
   _id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
@@ -165,8 +256,32 @@ export type HabitDefinitionResolvers<ContextType = any, ParentType extends Resol
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type HabitGoalResolvers<ContextType = any, ParentType extends ResolversParentTypes['HabitGoal'] = ResolversParentTypes['HabitGoal']> = {
+  count?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  reminder?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  repeat?: Resolver<ResolversTypes['HabitRepeat'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type HabitInstanceResolvers<ContextType = any, ParentType extends ResolversParentTypes['HabitInstance'] = ResolversParentTypes['HabitInstance']> = {
+  _id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  goal?: Resolver<ResolversTypes['HabitGoal'], ParentType, ContextType>;
+  habitDefinitionId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type HabitRepeatResolvers<ContextType = any, ParentType extends ResolversParentTypes['HabitRepeat'] = ResolversParentTypes['HabitRepeat']> = {
+  every?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  interval?: Resolver<ResolversTypes['RepeatInterval'], ParentType, ContextType>;
+  on?: Resolver<Maybe<Array<Maybe<ResolversTypes['RepeatOn']>>>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   createHabitDefinition?: Resolver<Maybe<ResolversTypes['HabitDefinition']>, ParentType, ContextType, Partial<MutationCreateHabitDefinitionArgs>>;
+  createHabitInstance?: Resolver<Maybe<ResolversTypes['GeneralResponse']>, ParentType, ContextType, Partial<MutationCreateHabitInstanceArgs>>;
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
@@ -185,7 +300,11 @@ export type UserResolvers<ContextType = any, ParentType extends ResolversParentT
 
 export type Resolvers<ContextType = any> = {
   DateTime?: GraphQLScalarType;
+  GeneralResponse?: GeneralResponseResolvers<ContextType>;
   HabitDefinition?: HabitDefinitionResolvers<ContextType>;
+  HabitGoal?: HabitGoalResolvers<ContextType>;
+  HabitInstance?: HabitInstanceResolvers<ContextType>;
+  HabitRepeat?: HabitRepeatResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   User?: UserResolvers<ContextType>;

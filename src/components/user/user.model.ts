@@ -1,8 +1,9 @@
 import mongoose from 'mongoose';
 import { IDBUser } from './user.types';
+import habitInstanceSchema from '../habit-instance/habit-instance.model';
 
 const collection = 'user';
-const userSchema = new mongoose.Schema<IDBUser>(
+const schema = new mongoose.Schema<IDBUser>(
   {
     name: { type: String, required: true },
     email: {
@@ -14,6 +15,7 @@ const userSchema = new mongoose.Schema<IDBUser>(
     salt: { type: String, required: true },
     hash: { type: String, required: true },
     picture: String,
+    habits: { type: [habitInstanceSchema], default: [] },
   },
   {
     timestamps: true,
@@ -21,6 +23,6 @@ const userSchema = new mongoose.Schema<IDBUser>(
   }
 );
 
-const userModel = mongoose.model(collection, userSchema);
+const userModel = mongoose.model(collection, schema);
 
 export default userModel;

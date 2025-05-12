@@ -14,6 +14,47 @@ type HabitDefinition {
   updatedAt: DateTime!
 }
 
+type HabitRepeat {
+  on: [RepeatOn]
+  every: Int!
+  interval: RepeatInterval!
+}
+
+type HabitGoal {
+  count: Int!
+  repeat: HabitRepeat!
+  reminder: String
+}
+
+enum RepeatOn {
+  Sat
+  Sun
+  Mon
+  Tue
+  Wed
+  Thu
+  Fri
+}
+
+enum RepeatInterval {
+  day
+  week
+  month
+  year
+}
+
+type HabitInstance {
+  _id: String!
+  habitDefinitionId: String!
+  goal: HabitGoal!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type GeneralResponse {
+  message: String!
+}
+
 scalar DateTime
 
 type Query {
@@ -24,9 +65,30 @@ type Mutation {
   createHabitDefinition(
     createHabitDefinitionInput: CreateHabitDefinitionInput
   ): HabitDefinition
+
+  createHabitInstance(
+    createHabitInstanceInput: CreateHabitInstanceInput
+  ): GeneralResponse
 }
 
 input CreateHabitDefinitionInput {
   name: String!
   is_shared: Boolean!
+}
+
+input CreateHabitInstanceInput {
+  habitDefinitionId: String!
+  goal: HabitGoalInput!
+}
+
+input HabitRepeatInput {
+  on: [RepeatOn]
+  every: Int!
+  interval: RepeatInterval!
+}
+
+input HabitGoalInput {
+  count: Int!
+  repeat: HabitRepeatInput!
+  reminder: String
 }

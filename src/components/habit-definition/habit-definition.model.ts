@@ -2,17 +2,18 @@ import mongoose from 'mongoose';
 import { IHabitDefinition } from './habit-definition.types';
 
 const collection = 'habit_definition';
-const habitSchema = new mongoose.Schema<IHabitDefinition>(
+const schema = new mongoose.Schema<IHabitDefinition>(
   {
     name: { type: String, required: true },
     is_shared: { type: Boolean, required: true },
   },
   {
-    timestamps: true,
     collection,
+    timestamps: true,
   }
 );
 
-const habitModel = mongoose.model(collection, habitSchema);
+const habitDefinitionModel = mongoose.model(collection, schema);
 
-export default habitModel;
+export default habitDefinitionModel;
+export { collection };

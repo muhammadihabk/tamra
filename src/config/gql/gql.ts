@@ -9,6 +9,7 @@ import passport, { handlePassportErrors } from '../../config/auth/passport';
 import authController from '../../components/auth/auth.controller';
 import scalars from '../../common/gql/types';
 import habitDefinitionResolvers from '../../components/habit-definition/habit-definition.resolvers';
+import habitInstanceResolvers from '../../components/habit-instance/habit-instance.resolvers';
 
 async function startApolloServer() {
   const typeDefs = gql(
@@ -33,6 +34,7 @@ async function startApolloServer() {
     resolvers: {
       ...userResolvers,
       ...habitDefinitionResolvers,
+      ...habitInstanceResolvers,
       ...scalars,
     },
   });
