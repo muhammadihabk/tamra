@@ -13,6 +13,4 @@ async function findOne(id: string): Promise<User | null> {
   return await UserService.findOne({ id });
 }
 
-export default {
-  resolvers,
-};
+export default resolvers;

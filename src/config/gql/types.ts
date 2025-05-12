@@ -17,6 +17,29 @@ export type Scalars = {
   DateTime: { input: any; output: any; }
 };
 
+export type CreateHabitDefinitionInput = {
+  is_shared: Scalars['Boolean']['input'];
+  name: Scalars['String']['input'];
+};
+
+export type HabitDefinition = {
+  __typename?: 'HabitDefinition';
+  _id: Scalars['String']['output'];
+  createdAt: Scalars['DateTime']['output'];
+  name: Scalars['String']['output'];
+  updatedAt: Scalars['DateTime']['output'];
+};
+
+export type Mutation = {
+  __typename?: 'Mutation';
+  createHabitDefinition?: Maybe<HabitDefinition>;
+};
+
+
+export type MutationCreateHabitDefinitionArgs = {
+  createHabitDefinitionInput?: InputMaybe<CreateHabitDefinitionInput>;
+};
+
 export type Query = {
   __typename?: 'Query';
   user?: Maybe<User>;
@@ -109,7 +132,10 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
+  CreateHabitDefinitionInput: CreateHabitDefinitionInput;
   DateTime: ResolverTypeWrapper<Scalars['DateTime']['output']>;
+  HabitDefinition: ResolverTypeWrapper<HabitDefinition>;
+  Mutation: ResolverTypeWrapper<{}>;
   Query: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
   User: ResolverTypeWrapper<User>;
@@ -118,7 +144,10 @@ export type ResolversTypes = {
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
   Boolean: Scalars['Boolean']['output'];
+  CreateHabitDefinitionInput: CreateHabitDefinitionInput;
   DateTime: Scalars['DateTime']['output'];
+  HabitDefinition: HabitDefinition;
+  Mutation: {};
   Query: {};
   String: Scalars['String']['output'];
   User: User;
@@ -127,6 +156,18 @@ export type ResolversParentTypes = {
 export interface DateTimeScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['DateTime'], any> {
   name: 'DateTime';
 }
+
+export type HabitDefinitionResolvers<ContextType = any, ParentType extends ResolversParentTypes['HabitDefinition'] = ResolversParentTypes['HabitDefinition']> = {
+  _id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
+  createHabitDefinition?: Resolver<Maybe<ResolversTypes['HabitDefinition']>, ParentType, ContextType, Partial<MutationCreateHabitDefinitionArgs>>;
+};
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryUserArgs, 'id'>>;
@@ -144,6 +185,8 @@ export type UserResolvers<ContextType = any, ParentType extends ResolversParentT
 
 export type Resolvers<ContextType = any> = {
   DateTime?: GraphQLScalarType;
+  HabitDefinition?: HabitDefinitionResolvers<ContextType>;
+  Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   User?: UserResolvers<ContextType>;
 };

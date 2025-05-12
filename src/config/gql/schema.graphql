@@ -7,8 +7,26 @@ type User {
   updatedAt: DateTime!
 }
 
+type HabitDefinition {
+  _id: String!
+  name: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
 scalar DateTime
 
 type Query {
   user(id: String!): User
+}
+
+type Mutation {
+  createHabitDefinition(
+    createHabitDefinitionInput: CreateHabitDefinitionInput
+  ): HabitDefinition
+}
+
+input CreateHabitDefinitionInput {
+  name: String!
+  is_shared: Boolean!
 }

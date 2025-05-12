@@ -3,11 +3,12 @@ import { expressMiddleware } from '@apollo/server/express4';
 import { readFileSync } from 'fs';
 import { gql } from 'graphql-tag';
 import express from 'express';
-import UserResolvers from '../../components/user/user.resolvers';
+import userResolvers from '../../components/user/user.resolvers';
 import { IDBUser } from '../../components/user/user.types';
 import passport, { handlePassportErrors } from '../../config/auth/passport';
 import authController from '../../components/auth/auth.controller';
-import { DateTimeScalar } from '../../common/gql/types';
+import scalars from '../../common/gql/types';
+import habitDefinitionResolvers from '../../components/habit-definition/habit-definition.resolvers';
 
 async function startApolloServer() {
   const typeDefs = gql(
@@ -30,8 +31,9 @@ async function startApolloServer() {
   const server = new ApolloServer<IContext>({
     typeDefs,
     resolvers: {
-      ...UserResolvers.resolvers,
-      DateTime: DateTimeScalar,
+      ...userResolvers,
+      ...habitDefinitionResolvers,
+      ...scalars,
     },
   });
   await server.start();
