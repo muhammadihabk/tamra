@@ -3,9 +3,11 @@ type User {
   name: String!
   email: String!
   picture: String
-  # createdAt: String!
-  # updatedAt: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
+
+scalar DateTime
 
 type Query {
   user(id: String!): User

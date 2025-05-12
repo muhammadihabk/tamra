@@ -7,6 +7,7 @@ import UserResolvers from '../../components/user/user.resolvers';
 import { IDBUser } from '../../components/user/user.types';
 import passport, { handlePassportErrors } from '../../config/auth/passport';
 import authController from '../../components/auth/auth.controller';
+import { DateTimeScalar } from '../../common/gql/types';
 
 async function startApolloServer() {
   const typeDefs = gql(
@@ -28,7 +29,10 @@ async function startApolloServer() {
 
   const server = new ApolloServer<IContext>({
     typeDefs,
-    resolvers: UserResolvers.resolvers,
+    resolvers: {
+      ...UserResolvers.resolvers,
+      DateTime: DateTimeScalar,
+    },
   });
   await server.start();
 

@@ -1,14 +1,12 @@
 import userModel from './user.model';
 import { IFindUserFilter, IDBUser } from './user.types';
-import { DuplicateKeyError } from '../../common/errors';
+import { handleDBErrors } from '../../common/errors';
 
 async function create(user: IDBUser) {
   try {
     return await userModel.create(user);
   } catch (error: any) {
-    if (error.code === 11000) {
-      throw new DuplicateKeyError('User already exists');
-    }
+    handleDBErrors(error, 'User');
   }
 }
 
