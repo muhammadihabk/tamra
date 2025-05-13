@@ -55,23 +55,13 @@ type GeneralResponse {
   message: String!
 }
 
+type HabitStats {
+  totalCount: Float!
+  streak: Int!
+  score: Float!
+}
+
 scalar DateTime
-
-type Query {
-  user(id: String!): User
-}
-
-type Mutation {
-  createHabitDefinition(
-    createHabitDefinitionInput: CreateHabitDefinitionInput
-  ): HabitDefinition
-
-  createHabitInstance(
-    createHabitInstanceInput: CreateHabitInstanceInput
-  ): GeneralResponse
-
-  createHabitLog(createHabitLogInput: CreateHabitLogInput): GeneralResponse
-}
 
 input CreateHabitDefinitionInput {
   name: String!
@@ -99,4 +89,22 @@ input CreateHabitLogInput {
   habitInstanceId: String!
   count: Int!
   date: DateTime
+}
+
+type Query {
+  user(id: String!): User
+
+  habitStats(id: String!): HabitStats
+}
+
+type Mutation {
+  createHabitDefinition(
+    createHabitDefinitionInput: CreateHabitDefinitionInput
+  ): HabitDefinition
+
+  createHabitInstance(
+    createHabitInstanceInput: CreateHabitInstanceInput
+  ): GeneralResponse
+
+  createHabitLog(createHabitLogInput: CreateHabitLogInput): GeneralResponse
 }

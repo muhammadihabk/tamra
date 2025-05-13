@@ -35,6 +35,7 @@ async function startApolloServer() {
     resolvers: {
       Query: {
         ...userResolvers.Query,
+        ...habitLogResolvers.Query,
       },
       Mutation: {
         ...habitDefinitionResolvers.Mutation,

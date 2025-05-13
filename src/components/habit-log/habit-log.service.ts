@@ -1,5 +1,5 @@
-import HabitLogRepository from "./habit-log.repository";
-import { ICreateHabitLogInput } from "./habit-log.types";
+import HabitLogRepository from './habit-log.repository';
+import { ICreateHabitLogInput } from './habit-log.types';
 
 async function create(data: ICreateHabitLogInput) {
   try {
@@ -9,6 +9,11 @@ async function create(data: ICreateHabitLogInput) {
   }
 }
 
+async function findAll(habitId: string) {
+  return await HabitLogRepository.findAll(habitId);
+}
+
 export default {
   create,
+  findAll,
 };

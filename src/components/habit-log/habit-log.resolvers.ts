@@ -6,6 +6,11 @@ import HabitLogService from './habit-log.service';
 import UserService from '../user/user.service';
 
 const resolvers: Resolvers = {
+  Query: {
+    habitStats: (_, params) => {
+      return findAll(params.id);
+    },
+  },
   Mutation: {
     createHabitLog: async (_, params, { user }) => {
       let input: any = params.createHabitLogInput!;
@@ -36,6 +41,10 @@ async function create(
       throw error;
     }
   }
+}
+
+async function findAll(habitId: string) {
+  return await HabitLogService.findAll(habitId);
 }
 
 export default resolvers;

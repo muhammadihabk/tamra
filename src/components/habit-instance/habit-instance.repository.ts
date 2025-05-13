@@ -18,6 +18,20 @@ async function create(habitInstance: ICreateHabitInstanceInput) {
   }
 }
 
+async function findOne(habitId: string) {
+  const habit = await userModel.findOne(
+    {
+      'habits._id': new Types.ObjectId(habitId),
+    },
+    {
+      'habits.$': 1,
+    }
+  );
+
+  return habit?.habits?.[0];
+}
+
 export default {
   create,
+  findOne,
 };

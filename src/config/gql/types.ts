@@ -81,6 +81,13 @@ export type HabitRepeatInput = {
   on?: InputMaybe<Array<InputMaybe<RepeatOn>>>;
 };
 
+export type HabitStats = {
+  __typename?: 'HabitStats';
+  score: Scalars['Float']['output'];
+  streak: Scalars['Int']['output'];
+  totalCount: Scalars['Float']['output'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   createHabitDefinition?: Maybe<HabitDefinition>;
@@ -105,7 +112,13 @@ export type MutationCreateHabitLogArgs = {
 
 export type Query = {
   __typename?: 'Query';
+  habitStats?: Maybe<HabitStats>;
   user?: Maybe<User>;
+};
+
+
+export type QueryHabitStatsArgs = {
+  id: Scalars['String']['input'];
 };
 
 
@@ -216,6 +229,7 @@ export type ResolversTypes = {
   CreateHabitInstanceInput: CreateHabitInstanceInput;
   CreateHabitLogInput: CreateHabitLogInput;
   DateTime: ResolverTypeWrapper<Scalars['DateTime']['output']>;
+  Float: ResolverTypeWrapper<Scalars['Float']['output']>;
   GeneralResponse: ResolverTypeWrapper<GeneralResponse>;
   HabitDefinition: ResolverTypeWrapper<HabitDefinition>;
   HabitGoal: ResolverTypeWrapper<HabitGoal>;
@@ -223,6 +237,7 @@ export type ResolversTypes = {
   HabitInstance: ResolverTypeWrapper<HabitInstance>;
   HabitRepeat: ResolverTypeWrapper<HabitRepeat>;
   HabitRepeatInput: HabitRepeatInput;
+  HabitStats: ResolverTypeWrapper<HabitStats>;
   Int: ResolverTypeWrapper<Scalars['Int']['output']>;
   Mutation: ResolverTypeWrapper<{}>;
   Query: ResolverTypeWrapper<{}>;
@@ -239,6 +254,7 @@ export type ResolversParentTypes = {
   CreateHabitInstanceInput: CreateHabitInstanceInput;
   CreateHabitLogInput: CreateHabitLogInput;
   DateTime: Scalars['DateTime']['output'];
+  Float: Scalars['Float']['output'];
   GeneralResponse: GeneralResponse;
   HabitDefinition: HabitDefinition;
   HabitGoal: HabitGoal;
@@ -246,6 +262,7 @@ export type ResolversParentTypes = {
   HabitInstance: HabitInstance;
   HabitRepeat: HabitRepeat;
   HabitRepeatInput: HabitRepeatInput;
+  HabitStats: HabitStats;
   Int: Scalars['Int']['output'];
   Mutation: {};
   Query: {};
@@ -293,6 +310,13 @@ export type HabitRepeatResolvers<ContextType = any, ParentType extends Resolvers
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type HabitStatsResolvers<ContextType = any, ParentType extends ResolversParentTypes['HabitStats'] = ResolversParentTypes['HabitStats']> = {
+  score?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  streak?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  totalCount?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   createHabitDefinition?: Resolver<Maybe<ResolversTypes['HabitDefinition']>, ParentType, ContextType, Partial<MutationCreateHabitDefinitionArgs>>;
   createHabitInstance?: Resolver<Maybe<ResolversTypes['GeneralResponse']>, ParentType, ContextType, Partial<MutationCreateHabitInstanceArgs>>;
@@ -300,6 +324,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
+  habitStats?: Resolver<Maybe<ResolversTypes['HabitStats']>, ParentType, ContextType, RequireFields<QueryHabitStatsArgs, 'id'>>;
   user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryUserArgs, 'id'>>;
 };
 
@@ -320,6 +345,7 @@ export type Resolvers<ContextType = any> = {
   HabitGoal?: HabitGoalResolvers<ContextType>;
   HabitInstance?: HabitInstanceResolvers<ContextType>;
   HabitRepeat?: HabitRepeatResolvers<ContextType>;
+  HabitStats?: HabitStatsResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   User?: UserResolvers<ContextType>;
