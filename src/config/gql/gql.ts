@@ -3,6 +3,7 @@ import { expressMiddleware } from '@apollo/server/express4';
 import { readFileSync } from 'fs';
 import { gql } from 'graphql-tag';
 import express from 'express';
+import cors from 'cors';
 import { IDBUser } from '../../components/user/user.types';
 import passport, { handlePassportErrors } from '../../config/auth/passport';
 import authController from '../../components/auth/auth.controller';
@@ -23,6 +24,7 @@ async function startApolloServer() {
   }
 
   const app = express();
+  app.use(cors({ origin: process.env.CLIENT_URL }));
   app.use(express.json());
   app.use('/auth', authController);
   app.use(
