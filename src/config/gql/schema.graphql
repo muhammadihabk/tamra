@@ -69,6 +69,8 @@ type Mutation {
   createHabitInstance(
     createHabitInstanceInput: CreateHabitInstanceInput
   ): GeneralResponse
+
+  createHabitLog(createHabitLogInput: CreateHabitLogInput): GeneralResponse
 }
 
 input CreateHabitDefinitionInput {
@@ -91,4 +93,10 @@ input HabitGoalInput {
   count: Int!
   repeat: HabitRepeatInput!
   reminder: String
+}
+
+input CreateHabitLogInput {
+  habitInstanceId: String!
+  count: Int!
+  date: DateTime
 }

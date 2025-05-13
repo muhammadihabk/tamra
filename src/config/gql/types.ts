@@ -27,6 +27,12 @@ export type CreateHabitInstanceInput = {
   habitDefinitionId: Scalars['String']['input'];
 };
 
+export type CreateHabitLogInput = {
+  count: Scalars['Int']['input'];
+  date?: InputMaybe<Scalars['DateTime']['input']>;
+  habitInstanceId: Scalars['String']['input'];
+};
+
 export type GeneralResponse = {
   __typename?: 'GeneralResponse';
   message: Scalars['String']['output'];
@@ -79,6 +85,7 @@ export type Mutation = {
   __typename?: 'Mutation';
   createHabitDefinition?: Maybe<HabitDefinition>;
   createHabitInstance?: Maybe<GeneralResponse>;
+  createHabitLog?: Maybe<GeneralResponse>;
 };
 
 
@@ -89,6 +96,11 @@ export type MutationCreateHabitDefinitionArgs = {
 
 export type MutationCreateHabitInstanceArgs = {
   createHabitInstanceInput?: InputMaybe<CreateHabitInstanceInput>;
+};
+
+
+export type MutationCreateHabitLogArgs = {
+  createHabitLogInput?: InputMaybe<CreateHabitLogInput>;
 };
 
 export type Query = {
@@ -202,6 +214,7 @@ export type ResolversTypes = {
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
   CreateHabitDefinitionInput: CreateHabitDefinitionInput;
   CreateHabitInstanceInput: CreateHabitInstanceInput;
+  CreateHabitLogInput: CreateHabitLogInput;
   DateTime: ResolverTypeWrapper<Scalars['DateTime']['output']>;
   GeneralResponse: ResolverTypeWrapper<GeneralResponse>;
   HabitDefinition: ResolverTypeWrapper<HabitDefinition>;
@@ -224,6 +237,7 @@ export type ResolversParentTypes = {
   Boolean: Scalars['Boolean']['output'];
   CreateHabitDefinitionInput: CreateHabitDefinitionInput;
   CreateHabitInstanceInput: CreateHabitInstanceInput;
+  CreateHabitLogInput: CreateHabitLogInput;
   DateTime: Scalars['DateTime']['output'];
   GeneralResponse: GeneralResponse;
   HabitDefinition: HabitDefinition;
@@ -282,6 +296,7 @@ export type HabitRepeatResolvers<ContextType = any, ParentType extends Resolvers
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   createHabitDefinition?: Resolver<Maybe<ResolversTypes['HabitDefinition']>, ParentType, ContextType, Partial<MutationCreateHabitDefinitionArgs>>;
   createHabitInstance?: Resolver<Maybe<ResolversTypes['GeneralResponse']>, ParentType, ContextType, Partial<MutationCreateHabitInstanceArgs>>;
+  createHabitLog?: Resolver<Maybe<ResolversTypes['GeneralResponse']>, ParentType, ContextType, Partial<MutationCreateHabitLogArgs>>;
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {

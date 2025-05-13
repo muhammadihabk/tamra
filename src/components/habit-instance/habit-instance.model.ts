@@ -55,7 +55,7 @@ const goalSchema = new mongoose.Schema<Goal>(
   { _id: false }
 );
 
-const collection = 'habit_instance';
+const habitInstanceCollection = 'habit_instance';
 const habitInstanceSchema = new mongoose.Schema<IHabitInstance>(
   {
     habitDefinitionId: {
@@ -69,10 +69,10 @@ const habitInstanceSchema = new mongoose.Schema<IHabitInstance>(
     },
   },
   {
-    collection,
-    _id: false,
+    collection: habitInstanceCollection,
     timestamps: true,
   }
 );
 
 export default habitInstanceSchema;
+export { habitInstanceCollection };

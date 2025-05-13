@@ -28,8 +28,13 @@ async function authFindOne(filter: IFindUserFilter): Promise<IDBUser | null> {
   return await UserRepository.findOne(filter);
 }
 
+async function findOneByHabitId(habitId: string): Promise<User | null> {
+  return await UserRepository.findOneByHabitId(habitId);
+}
+
 export default {
   create,
   findOne,
   authFindOne,
+  findOneByHabitId,
 };
