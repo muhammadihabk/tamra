@@ -92,6 +92,7 @@ input CreateHabitLogInput {
 }
 
 type Query {
+  me: User
   user(id: String!): User
 
   habitStats(id: String!): HabitStats

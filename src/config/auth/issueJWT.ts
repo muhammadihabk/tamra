@@ -7,7 +7,7 @@ function issueJWT(id: string) {
     sub: id,
   };
   const token = jwt.sign(payload, secret!, {
-    expiresIn: '1d',
+    expiresIn: Number(process.env.JWT_EXPIRATION),
   });
 
   return token;

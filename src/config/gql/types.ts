@@ -113,6 +113,7 @@ export type MutationCreateHabitLogArgs = {
 export type Query = {
   __typename?: 'Query';
   habitStats?: Maybe<HabitStats>;
+  me?: Maybe<User>;
   user?: Maybe<User>;
 };
 
@@ -325,6 +326,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   habitStats?: Resolver<Maybe<ResolversTypes['HabitStats']>, ParentType, ContextType, RequireFields<QueryHabitStatsArgs, 'id'>>;
+  me?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
   user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryUserArgs, 'id'>>;
 };
 

@@ -6,6 +6,9 @@ const resolvers: Resolvers = {
     user: (_, params) => {
       return findOne(params.id);
     },
+    me: (_, __, { user }) => {
+      return user.id;
+    },
   },
 };
 
