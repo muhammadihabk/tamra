@@ -7,7 +7,7 @@ const resolvers: Resolvers = {
       return findOne(params.id);
     },
     me: (_, __, { user }) => {
-      return user.id;
+      return user._id;
     },
   },
 };

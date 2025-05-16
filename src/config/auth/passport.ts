@@ -1,10 +1,22 @@
+import { Request } from 'express';
 import userService from '../../components/user/user.service';
 import passport from 'passport';
 import { Strategy as JwtStrategy, ExtractJwt } from 'passport-jwt';
 
 const secret = process.env.PASSPORT_SECRET;
+const cookieExtractor = function (req: Request) {
+  let token = null;
+  if (req && req.cookies) {
+    token = req.cookies['authToken'];
+  }
+
+  return token;
+};
 const options = {
-  jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+  jwtFromRequest: ExtractJwt.fromExtractors([
+    cookieExtractor,
+    ExtractJwt.fromAuthHeaderAsBearerToken(),
+  ]),
   secretOrKey: secret!,
 };
 

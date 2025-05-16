@@ -61,6 +61,22 @@ type HabitStats {
   score: Float!
 }
 
+type HabitLog {
+  _id: String!
+  count: Int!
+  date: DateTime!
+}
+
+type HabitsByUserIdResponse {
+  _id: String!
+  habitDefinitionId: String!
+  goal: HabitGoal!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  logs: [HabitLog]
+  habitDefinition: HabitDefinition
+}
+
 scalar DateTime
 
 input CreateHabitDefinitionInput {
@@ -92,9 +108,10 @@ input CreateHabitLogInput {
 }
 
 type Query {
-  me: User
+  me: String
   user(id: String!): User
 
+  habitsByUserId(id: String!): [HabitsByUserIdResponse]
   habitStats(id: String!): HabitStats
 }
 

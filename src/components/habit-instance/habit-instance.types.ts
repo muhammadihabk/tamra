@@ -36,8 +36,12 @@ export enum RepeatInterval {
   YEAR = 'year',
 }
 
-export interface ICreateHabitInstanceInput  {
+export interface ICreateHabitInstanceInput {
   goal: Goal;
   habitDefinitionId: string;
   userId: string;
-};
+}
+
+export interface IFindAllOptions {
+  userId: string;
+}

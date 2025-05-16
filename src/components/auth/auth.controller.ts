@@ -14,7 +14,16 @@ authController.post('/sign-up', async (req, res) => {
 
     const token = issueJWT(createdUser!._id);
 
-    res.status(201).json({ token });
+    res
+      .status(201)
+      .cookie('authToken', token, {
+        httpOnly: false,
+        secure: process.env.NODE_ENV === 'production',
+        maxAge: Number(process.env.JWT_EXPIRATION),
+      })
+      .json({
+        id: createdUser!._id,
+      });
   } catch (error) {
     if (error instanceof DuplicateKeyError) {
       res.sendStatus(409);
@@ -28,17 +37,26 @@ authController.post('/sign-in', async (req, res) => {
   if (!user) {
     console.log("[Auth]: Email isn't found.");
     res.sendStatus(404);
+    console.log('404');
     return;
   }
   if (!isValidPassword(loginInput.password, user.salt, user.hash)) {
     console.log(`[Auth]: Invalid credentials for user`, user);
     res.sendStatus(401);
+    console.log('401');
     return;
   }
 
-  res.json({
-    token: issueJWT(user._id),
-  });
+  const token = issueJWT(user._id);
+
+  res
+    .cookie('authToken', token, {
+      httpOnly: false,
+      maxAge: Number(process.env.JWT_EXPIRATION),
+    })
+    .json({
+      id: user._id,
+    });
 });
 
 export default authController;

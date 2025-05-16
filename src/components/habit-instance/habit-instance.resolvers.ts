@@ -1,10 +1,19 @@
 import { GraphQLError } from 'graphql';
 import { ValidationError } from '../../common/errors';
-import { GeneralResponse, Resolvers } from '../../config/gql/types';
+import {
+  GeneralResponse,
+  HabitsByUserIdResponse,
+  Resolvers,
+} from '../../config/gql/types';
 import HabitInstanceService from './habit-instance.service';
 import { ICreateHabitInstanceInput } from './habit-instance.types';
 
 const resolvers: Resolvers = {
+  Query: {
+    habitsByUserId: async (_, params) => {
+      return await habitsByUserId(params.id);
+    },
+  },
   Mutation: {
     createHabitInstance: async (_, params, { user }) => {
       let input: any = params.createHabitInstanceInput!;
@@ -30,6 +39,12 @@ async function create(
       throw error;
     }
   }
+}
+
+async function habitsByUserId(
+  id: string
+): Promise<HabitsByUserIdResponse[] | null> {
+  return await HabitInstanceService.habitsByUserId(id);
 }
 
 export default resolvers;

@@ -9,6 +9,15 @@ async function create(data: ICreateHabitInstanceInput) {
   }
 }
 
+async function habitsByUserId(id: string) {
+  try {
+    return await HabitInstanceRepository.findAll({ userId: id });
+  } catch (error) {
+    throw error;
+  }
+}
+
 export default {
   create,
+  habitsByUserId,
 };

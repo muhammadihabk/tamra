@@ -12,6 +12,7 @@ import userResolvers from '../../components/user/user.resolvers';
 import habitDefinitionResolvers from '../../components/habit-definition/habit-definition.resolvers';
 import habitInstanceResolvers from '../../components/habit-instance/habit-instance.resolvers';
 import habitLogResolvers from '../../components/habit-log/habit-log.resolvers';
+import cookieParser from '../../common/middlewares/cookie-parser';
 
 async function startApolloServer() {
   const typeDefs = gql(
@@ -24,8 +25,14 @@ async function startApolloServer() {
   }
 
   const app = express();
-  app.use(cors({ origin: process.env.CLIENT_URL }));
+  app.use(
+    cors({
+      origin: process.env.CLIENT_URL,
+      credentials: true,
+    })
+  );
   app.use(express.json());
+  app.use(cookieParser);
   app.use('/auth', authController);
   app.use(
     passport.authenticate('jwt', { session: false }),
@@ -37,6 +44,7 @@ async function startApolloServer() {
     resolvers: {
       Query: {
         ...userResolvers.Query,
+        ...habitInstanceResolvers.Query,
         ...habitLogResolvers.Query,
       },
       Mutation: {
