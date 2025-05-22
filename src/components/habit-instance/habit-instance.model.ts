@@ -2,25 +2,19 @@ import mongoose, { Schema } from 'mongoose';
 import {
   Goal,
   IHabitInstance,
+  MonthRepeatOn,
   Repeat,
   RepeatInterval,
-  RepeatOn,
+  WeekRepeatOn,
 } from './habit-instance.types';
 import { collection as habitDefinitionCollection } from '../habit-definition/habit-definition.model';
 
+const repeatOnValues = [
+  ...Object.values(WeekRepeatOn),
+  ...Object.values(MonthRepeatOn),
+];
 const repeatSchema = new mongoose.Schema<Repeat>(
   {
-    on: {
-      type: [String],
-      enum: Object.values(RepeatOn),
-      validate: {
-        validator: function (this: Repeat, days: string[]) {
-          // Only require 'on' for weekly repeats
-          return this.interval !== 'week' || (days && days.length > 0);
-        },
-        message: 'Weekly repeats require at least one day',
-      },
-    },
     every: {
       type: Number,
       min: 1,
@@ -30,6 +24,34 @@ const repeatSchema = new mongoose.Schema<Repeat>(
       type: String,
       enum: Object.values(RepeatInterval),
       required: true,
+    },
+    on: {
+      type: [String],
+      enum: repeatOnValues,
+      validate: {
+        validator: function (this: Repeat, on: any[]) {
+          if (this.interval === 'day') {
+            return false;
+          }
+
+          let condition = on && on.length > 0;
+          if (this.interval === 'week') {
+            condition =
+              condition &&
+              on.every((v) => Object.values(WeekRepeatOn).includes(v)) &&
+              !on.every((v) => Object.values(MonthRepeatOn).includes(v));
+          }
+          if (this.interval === 'month') {
+            condition =
+              condition &&
+              on.every((v) => Object.values(MonthRepeatOn).includes(v)) &&
+              !on.every((v) => Object.values(WeekRepeatOn).includes(v));
+          }
+
+          return condition;
+        },
+        message: 'Invalid on values',
+      },
     },
   },
   { _id: false }

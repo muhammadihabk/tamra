@@ -4,7 +4,6 @@ import userModel from '../user/user.model';
 import {
   ICreateHabitInstanceInput,
   IFindAllOptions,
-  IHabitInstance,
 } from './habit-instance.types';
 import habitDefinitionModel from '../habit-definition/habit-definition.model';
 import habitLogModel from '../habit-log/habit-log.model';
@@ -12,13 +11,19 @@ import habitLogModel from '../habit-log/habit-log.model';
 async function create(habitInstance: ICreateHabitInstanceInput) {
   try {
     const { userId, ...rest } = habitInstance;
-    await userModel.findByIdAndUpdate(new Types.ObjectId(userId), {
-      $push: {
-        habits: {
-          ...rest,
+    await userModel.findByIdAndUpdate(
+      new Types.ObjectId(userId),
+      {
+        $push: {
+          habits: {
+            ...rest,
+          },
         },
       },
-    });
+      {
+        runValidators: true,
+      }
+    );
   } catch (error: any) {
     handleDBErrors(error, 'Habit');
   }

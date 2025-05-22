@@ -34,13 +34,79 @@ enum RepeatOn {
   Wed
   Thu
   Fri
+  Day_1
+  Day_2
+  Day_3
+  Day_4
+  Day_5
+  Day_6
+  Day_7
+  Day_8
+  Day_9
+  Day_10
+  Day_11
+  Day_12
+  Day_13
+  Day_14
+  Day_15
+  Day_16
+  Day_17
+  Day_18
+  Day_19
+  Day_20
+  Day_21
+  Day_22
+  Day_23
+  Day_24
+  Day_25
+  Day_26
+  Day_27
+  Day_28
+  Day_29
+  Day_30
+  Day_31
+  Last_Day
+  First_Sat
+  First_Sun
+  First_Mon
+  First_Tue
+  First_Wed
+  First_Thu
+  First_Fri
+  Second_Sat
+  Second_Sun
+  Second_Mon
+  Second_Tue
+  Second_Wed
+  Second_Thu
+  Second_Fri
+  Third_Sat
+  Third_Sun
+  Third_Mon
+  Third_Tue
+  Third_Wed
+  Third_Thu
+  Third_Fri
+  Fourth_Sat
+  Fourth_Sun
+  Fourth_Mon
+  Fourth_Tue
+  Fourth_Wed
+  Fourth_Thu
+  Fourth_Fri
+  Last_Sat
+  Last_Sun
+  Last_Mon
+  Last_Tue
+  Last_Wed
+  Last_Thu
+  Last_Fri
 }
 
 enum RepeatInterval {
   day
   week
   month
-  year
 }
 
 type HabitInstance {
