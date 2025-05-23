@@ -8,15 +8,15 @@ export interface IHabitInstance {
 }
 
 export interface Repeat {
-  on?: RepeatOn[];
   every: number;
   interval: RepeatInterval;
+  on?: RepeatOn[];
+  at?: string;
 }
 
 export interface Goal {
   count: number;
   repeat: Repeat;
-  reminder?: string;
 }
 
 export enum WeekRepeatOn {

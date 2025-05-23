@@ -49,7 +49,6 @@ export type HabitDefinition = {
 export type HabitGoal = {
   __typename?: 'HabitGoal';
   count: Scalars['Int']['output'];
-  reminder?: Maybe<Scalars['String']['output']>;
   repeat: HabitRepeat;
 };
 
@@ -77,6 +76,7 @@ export type HabitLog = {
 
 export type HabitRepeat = {
   __typename?: 'HabitRepeat';
+  at?: Maybe<Scalars['String']['output']>;
   every: Scalars['Int']['output'];
   interval: RepeatInterval;
   on?: Maybe<Array<Maybe<RepeatOn>>>;
@@ -384,7 +384,6 @@ export type HabitDefinitionResolvers<ContextType = any, ParentType extends Resol
 
 export type HabitGoalResolvers<ContextType = any, ParentType extends ResolversParentTypes['HabitGoal'] = ResolversParentTypes['HabitGoal']> = {
   count?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  reminder?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   repeat?: Resolver<ResolversTypes['HabitRepeat'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -406,6 +405,7 @@ export type HabitLogResolvers<ContextType = any, ParentType extends ResolversPar
 };
 
 export type HabitRepeatResolvers<ContextType = any, ParentType extends ResolversParentTypes['HabitRepeat'] = ResolversParentTypes['HabitRepeat']> = {
+  at?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   every?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   interval?: Resolver<ResolversTypes['RepeatInterval'], ParentType, ContextType>;
   on?: Resolver<Maybe<Array<Maybe<ResolversTypes['RepeatOn']>>>, ParentType, ContextType>;

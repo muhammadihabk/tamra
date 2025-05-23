@@ -15,15 +15,15 @@ type HabitDefinition {
 }
 
 type HabitRepeat {
-  on: [RepeatOn]
   every: Int!
   interval: RepeatInterval!
+  on: [RepeatOn]
+  at: String
 }
 
 type HabitGoal {
   count: Int!
   repeat: HabitRepeat!
-  reminder: String
 }
 
 enum RepeatOn {

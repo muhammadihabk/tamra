@@ -53,6 +53,11 @@ const repeatSchema = new mongoose.Schema<Repeat>(
         message: 'Invalid on values',
       },
     },
+    at: {
+      type: String,
+      match: /^([1]?[0-2]|[1-9]):[0-5][0-9]$/, // H:MM format
+      required: false,
+    },
   },
   { _id: false }
 );
@@ -67,11 +72,6 @@ const goalSchema = new mongoose.Schema<Goal>(
     repeat: {
       type: repeatSchema,
       required: true,
-    },
-    reminder: {
-      type: String,
-      match: /^([1]?[0-2]|[1-9]):[0-5][0-9]$/, // H:MM format
-      required: false,
     },
   },
   { _id: false }
