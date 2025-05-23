@@ -179,6 +179,7 @@ type Query {
 
   habitsByUserId(id: String!): [HabitsByUserIdResponse]
   habitStats(id: String!): HabitStats
+  habitDefinitions: [HabitDefinition]
 }
 
 type Mutation {

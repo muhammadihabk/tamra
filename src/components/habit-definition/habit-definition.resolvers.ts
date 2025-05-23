@@ -8,6 +8,11 @@ import {
 import HabitDefinitionService from './habit-definition.service';
 
 const resolvers: Resolvers = {
+  Query: {
+    habitDefinitions: () => {
+      return findAll();
+    },
+  },
   Mutation: {
     createHabitDefinition: (_, params) => {
       return create(params.createHabitDefinitionInput!);
@@ -31,6 +36,14 @@ async function create(
     } else {
       throw error;
     }
+  }
+}
+
+async function findAll(): Promise<HabitDefinition[] | []> {
+  try {
+    return await HabitDefinitionService.findAll();
+  } catch (error) {
+    throw error;
   }
 }
 

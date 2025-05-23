@@ -31,7 +31,7 @@ const repeatSchema = new mongoose.Schema<Repeat>(
       validate: {
         validator: function (this: Repeat, on: any[]) {
           if (this.interval === 'day') {
-            return false;
+            return this.on === undefined || this.on.length === 0;
           }
 
           let condition = on && on.length > 0;
