@@ -10,5 +10,5 @@ export interface ICreateHabitLogInput {
   userId: string;
   habitInstanceId: string;
   count: number;
-  date?: Date;
+  date: Date;
 }

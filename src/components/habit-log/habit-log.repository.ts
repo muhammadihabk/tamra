@@ -6,31 +6,40 @@ import { Types } from 'mongoose';
 
 async function create(habitLog: ICreateHabitLogInput) {
   try {
-    const existingHabitLog: any = await findOne({
-      date: habitLog.date,
-    });
+    const startOfDayUTC = new Date(
+      Date.UTC(
+        habitLog.date.getUTCFullYear(),
+        habitLog.date.getUTCMonth(),
+        habitLog.date.getUTCDate()
+      )
+    );
 
-    if (existingHabitLog) {
-      await habitLogModel.updateOne(
-        { _id: existingHabitLog._id },
-        { $set: habitLog }
-      );
+    const endOfDayExclusiveUTC = new Date(startOfDayUTC);
+    endOfDayExclusiveUTC.setUTCDate(startOfDayUTC.getUTCDate() + 1);
 
-      return;
-    }
+    const query = {
+      habitInstanceId: new Types.ObjectId(habitLog.habitInstanceId),
+      date: {
+        $gte: startOfDayUTC,
+        $lt: endOfDayExclusiveUTC,
+      },
+    };
 
-    await habitLogModel.create(habitLog);
+    const update = {
+      $set: {
+        ...habitLog,
+      },
+    };
+
+    const options = {
+      upsert: true,
+      setDefaultsOnInsert: true,
+    };
+
+    await habitLogModel.findOneAndUpdate(query, update, options);
   } catch (error: any) {
     handleDBErrors(error, 'Habit');
   }
-}
-
-async function findOne(options: any) {
-  const habit = await habitLogModel.findOne({
-    date: new Date(options.date),
-  });
-
-  return habit;
 }
 
 async function findAll(habitId: string) {

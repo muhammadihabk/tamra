@@ -17,13 +17,14 @@ const schema = new mongoose.Schema<IHabitLog>(
     date: {
       type: Date,
       required: true,
-      unique: true,
     },
   },
   {
     collection,
   }
 );
+
+schema.index({ habitInstanceId: 1, date: -1 });
 
 const habitLogModel = mongoose.model(collection, schema);
 
