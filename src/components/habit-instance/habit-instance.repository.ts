@@ -68,9 +68,13 @@ async function findAll(options: IFindAllOptions) {
 
     const habitInstancesIds = user?.habits.map(({ _id }: any) => _id);
 
-    const logs = await habitLogModel.find({
-      habitInstanceId: { $in: habitInstancesIds },
-    });
+    const logs = await habitLogModel.find(
+      {
+        habitInstanceId: { $in: habitInstancesIds },
+      },
+      undefined,
+      { sort: { date: 1 } }
+    );
 
     user?.habits.forEach((habit: any) => {
       const matchedLogs = logs.filter((log: any) =>
