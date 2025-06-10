@@ -10,8 +10,9 @@ import { ICreateHabitInstanceInput } from './habit-instance.types';
 
 const resolvers: Resolvers = {
   Query: {
-    habitsByUserId: async (_, params) => {
-      return await habitsByUserId(params.id);
+    habitsByUserId: async (_, params, { user }) => {
+      const id = params.id || user._id;
+      return await habitsByUserId(id);
     },
   },
   Mutation: {
@@ -42,8 +43,11 @@ async function create(
 }
 
 async function habitsByUserId(
-  id: string
+  id?: string
 ): Promise<HabitsByUserIdResponse[] | null> {
+  if (!id) {
+    return null; 
+  }
   return await HabitInstanceService.habitsByUserId(id);
 }
 

@@ -144,12 +144,12 @@ export type QueryHabitStatsArgs = {
 
 
 export type QueryHabitsByUserIdArgs = {
-  id: Scalars['String']['input'];
+  id?: InputMaybe<Scalars['String']['input']>;
 };
 
 
 export type QueryUserArgs = {
-  id: Scalars['String']['input'];
+  id?: InputMaybe<Scalars['String']['input']>;
 };
 
 export enum RepeatInterval {
@@ -440,9 +440,9 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   habitDefinitions?: Resolver<Maybe<Array<Maybe<ResolversTypes['HabitDefinition']>>>, ParentType, ContextType>;
   habitStats?: Resolver<Maybe<ResolversTypes['HabitStats']>, ParentType, ContextType, RequireFields<QueryHabitStatsArgs, 'id'>>;
-  habitsByUserId?: Resolver<Maybe<Array<Maybe<ResolversTypes['HabitsByUserIdResponse']>>>, ParentType, ContextType, RequireFields<QueryHabitsByUserIdArgs, 'id'>>;
+  habitsByUserId?: Resolver<Maybe<Array<Maybe<ResolversTypes['HabitsByUserIdResponse']>>>, ParentType, ContextType, Partial<QueryHabitsByUserIdArgs>>;
   me?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryUserArgs, 'id'>>;
+  user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, Partial<QueryUserArgs>>;
 };
 
 export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = {

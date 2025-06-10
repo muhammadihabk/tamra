@@ -175,9 +175,9 @@ input CreateHabitLogInput {
 
 type Query {
   me: String
-  user(id: String!): User
+  user(id: String): User
 
-  habitsByUserId(id: String!): [HabitsByUserIdResponse]
+  habitsByUserId(id: String): [HabitsByUserIdResponse]
   habitStats(id: String!): HabitStats
   habitDefinitions: [HabitDefinition]
 }
