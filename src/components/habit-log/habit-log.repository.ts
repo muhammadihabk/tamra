@@ -62,11 +62,13 @@ async function findAll(habitId: string) {
     }
     const today = new Date();
     const todayUTC = new Date(
-      Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate())
+      Date.UTC(today.getFullYear(), today.getMonth(), today.getDate())
     );
     const scoreRange = 40;
-    const scoreLowerDateBound = new Date(today);
-    scoreLowerDateBound.setDate(today.getDate() - scoreRange);
+    const scoreLowerDateBound = new Date(todayUTC).setDate(
+      todayUTC.getDate() - scoreRange
+    );
+
     const projectionStreakAlgo = {
       $reduce: {
         input: '$streakLogs',
@@ -85,13 +87,19 @@ async function findAll(habitId: string) {
               $cond: [
                 {
                   $and: [
-                    { $eq: ['$$currentDate', '$$prev.expectedDate'] }, // Check date matches
-                    { $gte: ['$$currentCount', habit.goal.count] }, // Check goal met
+                    {
+                      $eq: ['$$currentDate', '$$prev.expectedDate'],
+                    },
+                    {
+                      $gte: ['$$currentCount', habit.goal.count],
+                    },
                   ],
                 },
                 // Continue streak: increment and set next expected date
                 {
-                  currentStreak: { $add: ['$$prev.currentStreak', 1] },
+                  currentStreak: {
+                    $add: ['$$prev.currentStreak', 1],
+                  },
                   expectedDate: {
                     $subtract: ['$$currentDate', interval],
                   },
@@ -110,13 +118,13 @@ async function findAll(habitId: string) {
     const projectionScoreAlgo = { ...projectionStreakAlgo };
     projectionScoreAlgo.$reduce.input = '$scoreLogs';
     let result: any = await habitLogModel.aggregate([
-      // 1. Filter logs for the habit
+      // 1. Filter logs
       { $match: { habitInstanceId: new Types.ObjectId(habitId) } },
 
-      // 2. Sort logs by date (newest first)
+      // 2. Sort logs by date desc
       { $sort: { date: -1 } },
 
-      // 3. Group logs into an array
+      // 3. Group logs into arrays
       {
         $group: {
           _id: null,
@@ -125,7 +133,13 @@ async function findAll(habitId: string) {
           },
           streakLogs: {
             $push: {
-              date: '$date',
+              date: {
+                $dateTrunc: {
+                  date: '$date',
+                  unit: 'day',
+                  timezone: 'UTC',
+                },
+              },
               count: '$count',
             },
           },
@@ -136,7 +150,13 @@ async function findAll(habitId: string) {
                   $gte: ['$date', scoreLowerDateBound],
                 },
                 {
-                  date: '$date',
+                  date: {
+                    $dateTrunc: {
+                      date: '$date',
+                      unit: 'day',
+                      timezone: 'UTC',
+                    },
+                  },
                   count: '$count',
                 },
                 null,
@@ -160,7 +180,7 @@ async function findAll(habitId: string) {
         $project: {
           totalCount: '$totalCount',
           streak: '$streak.currentStreak',
-          score: { $multiply: ['$score.currentStreak', 2.5] },
+          score: { $multiply: ['$score.currentStreak', 2.5] }, // (streak / 40) * 100
         },
       },
     ]);
