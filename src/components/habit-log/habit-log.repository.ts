@@ -3,6 +3,7 @@ import { ICreateHabitLogInput } from './habit-log.types';
 import habitLogModel from './habit-log.model';
 import habitInstanceRepository from '../habit-instance/habit-instance.repository';
 import { Types } from 'mongoose';
+import { RepeatInterval } from '../habit-instance/habit-instance.types';
 
 async function create(habitLog: ICreateHabitLogInput) {
   try {
@@ -48,22 +49,44 @@ async function findAll(habitId: string) {
     if (!habit) {
       return null;
     }
-    let interval = 86400000; // 1 day
-    switch (habit.goal.repeat.interval) {
-      case 'day':
-        interval *= habit.goal.repeat.every;
-        break;
-      case 'week':
-        interval *= habit.goal.repeat.every * 7;
-        break;
-      case 'month':
-        interval *= habit.goal.repeat.every * 30;
-        break;
-    }
+
+    // Check if there's a log for today
     const today = new Date();
     const todayUTC = new Date(
       Date.UTC(today.getFullYear(), today.getMonth(), today.getDate())
     );
+
+    const todayLog = await habitLogModel.findOne({
+      habitInstanceId: new Types.ObjectId(habitId),
+      date: {
+        $gte: todayUTC,
+      },
+    });
+
+    // If no log for today, return simplified response
+    if (!todayLog) {
+      const totalCount = await habitLogModel.aggregate([
+        { $match: { habitInstanceId: new Types.ObjectId(habitId) } },
+        { $group: { _id: null, totalCount: { $sum: '$count' } } },
+      ]);
+
+      return {
+        totalCount: totalCount[0]?.totalCount || 0,
+        streak: 0,
+        score: 0,
+      };
+    }
+
+    const repeatEvery = habit.goal.repeat.every;
+    let repeatInterval: RepeatInterval = RepeatInterval.DAY;
+    switch (habit.goal.repeat.interval) {
+      case 'week':
+        repeatInterval = RepeatInterval.WEEK;
+        break;
+      case 'month':
+        repeatInterval = RepeatInterval.MONTH;
+        break;
+    }
     const scoreRange = 40;
     const scoreLowerDateBound = new Date(todayUTC).setDate(
       todayUTC.getDate() - scoreRange
@@ -75,6 +98,7 @@ async function findAll(habitId: string) {
         initialValue: {
           currentStreak: 0,
           expectedDate: todayUTC,
+          continue: true,
         },
         in: {
           $let: {
@@ -87,8 +111,34 @@ async function findAll(habitId: string) {
               $cond: [
                 {
                   $and: [
+                    '$$prev.continue',
                     {
-                      $eq: ['$$currentDate', '$$prev.expectedDate'],
+                      // Check if log's date is within `repeat.every` range.
+                      $and: [
+                        {
+                          $gte: [
+                            {
+                              $subtract: [
+                                '$$prev.expectedDate',
+                                '$$currentDate',
+                              ],
+                            },
+                            0,
+                          ],
+                        },
+                        {
+                          $gte: [
+                            '$$currentDate',
+                            {
+                              $dateSubtract: {
+                                startDate: '$$currentDate',
+                                unit: repeatInterval,
+                                amount: repeatEvery,
+                              },
+                            },
+                          ],
+                        },
+                      ],
                     },
                     {
                       $gte: ['$$currentCount', habit.goal.count],
@@ -101,13 +151,18 @@ async function findAll(habitId: string) {
                     $add: ['$$prev.currentStreak', 1],
                   },
                   expectedDate: {
-                    $subtract: ['$$currentDate', interval],
+                    $dateSubtract: {
+                      startDate: '$$currentDate',
+                      unit: repeatInterval,
+                      amount: repeatEvery,
+                    },
                   },
                 },
                 // Break streak: retain current streak
                 {
                   currentStreak: '$$prev.currentStreak',
                   expectedDate: '$$prev.expectedDate',
+                  continue: false,
                 },
               ],
             },
@@ -118,13 +173,42 @@ async function findAll(habitId: string) {
     const projectionScoreAlgo = { ...projectionStreakAlgo };
     projectionScoreAlgo.$reduce.input = '$scoreLogs';
     let result: any = await habitLogModel.aggregate([
-      // 1. Filter logs
+      // Filter logs
       { $match: { habitInstanceId: new Types.ObjectId(habitId) } },
 
-      // 2. Sort logs by date desc
-      { $sort: { date: -1 } },
+      {
+        $addFields: {
+          normalizedDate: {
+            $dateTrunc: {
+              date: '$date',
+              unit: 'day',
+              timezone: 'UTC',
+            },
+          },
+        },
+      },
 
-      // 3. Group logs into arrays
+      {
+        $setWindowFields: {
+          partitionBy: null,
+          sortBy: {
+            normalizedDate: 1,
+          },
+          output: {
+            intervalTotalCount: {
+              $sum: '$count',
+              window: {
+                range: [-(repeatEvery - 1), 0],
+                unit: repeatInterval,
+              },
+            },
+          },
+        },
+      },
+
+      { $sort: { normalizedDate: -1 } },
+
+      // Prepare arrays for $reduce
       {
         $group: {
           _id: null,
@@ -133,14 +217,8 @@ async function findAll(habitId: string) {
           },
           streakLogs: {
             $push: {
-              date: {
-                $dateTrunc: {
-                  date: '$date',
-                  unit: 'day',
-                  timezone: 'UTC',
-                },
-              },
-              count: '$count',
+              date: '$normalizedDate',
+              count: '$intervalTotalCount',
             },
           },
           scoreLogs: {
@@ -150,14 +228,8 @@ async function findAll(habitId: string) {
                   $gte: ['$date', scoreLowerDateBound],
                 },
                 {
-                  date: {
-                    $dateTrunc: {
-                      date: '$date',
-                      unit: 'day',
-                      timezone: 'UTC',
-                    },
-                  },
-                  count: '$count',
+                  date: '$normalizedDate',
+                  count: '$intervalTotalCount',
                 },
                 null,
               ],
@@ -166,7 +238,6 @@ async function findAll(habitId: string) {
         },
       },
 
-      // 4. Calculate streak with dynamic interval
       {
         $project: {
           totalCount: '$totalCount',
@@ -175,7 +246,6 @@ async function findAll(habitId: string) {
         },
       },
 
-      // 5. Extract the streak value
       {
         $project: {
           totalCount: '$totalCount',
@@ -196,7 +266,16 @@ async function findAll(habitId: string) {
   }
 }
 
+async function findOne(id: string) {
+  try {
+    return await habitLogModel.findById(id);
+  } catch (error: any) {
+    handleDBErrors(error, 'Habit Log');
+  }
+}
+
 export default {
   create,
   findAll,
+  findOne,
 };
